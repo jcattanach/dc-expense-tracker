@@ -4,7 +4,7 @@
     "password": "ziyFGnk_Tw5vd2p0Rrd_SPtro43n-DV3",
     "database": "ejndvxmd",
     "host": "elmer.db.elephantsql.com",
-    "dialect": "mysql"
+    "dialect": "postgres"
   },
   "test": {
     "username": "root",
