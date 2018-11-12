@@ -115,7 +115,6 @@ app.post('/select-category',function(req,res){
 })
 
 
-
 app.get('/logout', (req,res) =>{
   req.session.destroy(function(err){
   })
@@ -136,10 +135,15 @@ app.post('/new-transaction', function(req, res){
         name: transactionName,
         amount: transactionAmount,
         category: transactionCategory,
-        description: transactionDescription
+        description: transactionDescription,
+        userid: req.session.userid
     })
     newTransaction.save().then(function(){
-        res.redirect('/')
+        res.redirect('/index')
     })
 
+})
+
+app.post('/update-transaction', function(req,res){
+  
 })
