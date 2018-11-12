@@ -57,7 +57,7 @@ app.post('/register', function(req,res){
   })
 
   userInfo.save().then(function(){
-    res.redirect('/login')
+    res.redirect('/')
   })
 }else{
   res.redirect('/register')
@@ -76,7 +76,7 @@ app.get('/index',function(req,res){
         if(req.session.userid == null){
             res.redirect('/')
           } else {
-        
+
           models.transaction.findAll({
             where: {
               userid: req.session.userid
@@ -108,7 +108,7 @@ app.post('/select-category',function(req,res){
 app.get('/logout', (req,res) =>{
   req.session.destroy(function(err){
   })
-  res.redirect('/login')
+  res.redirect('/')
 })
 
 app.get('/',function(req,res){
