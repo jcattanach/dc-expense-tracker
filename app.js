@@ -84,19 +84,19 @@ app.listen(3000,function(){
 })
 
 app.get('/index',function(req,res){
-        if(req.session.userid == null){
-            res.redirect('/')
-          } else {
+    if(req.session.userid == null){
+        res.redirect('/')
+      } else {
 
-          models.transaction.findAll({
-            where: {
-              userid: req.session.userid
-            }
-          }).then(function(transactions){
-              res.render('index',{transactions: transactions})
-          })
+      models.transaction.findAll({
+        where: {
+          userid: req.session.userid
         }
-        })
+      }).then(function(transactions){
+          res.render('index',{transactions: transactions})
+      })
+    }
+})
 
 
 //fetch a particular category
@@ -111,6 +111,7 @@ app.post('/select-category',function(req,res){
         }
     }).then(function(category){
         res.render('index',{category:category})
+        console.log(category.amount)
     })
 })
 
