@@ -1,9 +1,9 @@
 {
   "development": {
-    "username": "ehldksdj",
-    "password": "bBOBecVRY64UY1ysdTfD2fx0xcDAvnAL",
-    "database": "ehldksdj",
-    "host": "baasu.db.elephantsql.com (baasu-01)",
+    "username": "ejndvxmd",
+    "password": "ziyFGnk_Tw5vd2p0Rrd_SPtro43n-DV3",
+    "database": "ejndvxmd",
+    "host": "elmer.db.elephantsql.com",
     "dialect": "postgres"
   },
   "test": {

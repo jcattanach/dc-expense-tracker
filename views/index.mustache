@@ -1,0 +1,49 @@
+<html>
+<head>
+</head>
+
+<body>
+ <div id="nav-bar">
+    <a href="/">View all Transactions</a>
+</div>
+<div>
+  <h1>Transactions</h1>
+
+  {{#transactions}}
+
+    <h3>{{name}}</h3>
+    <p>{{amount}}, {{category}}, {{description}}</p>
+    <form action="/delete-shop" method="POST">
+    <input type="hidden" name="transactionId" value="{{id}}"/>
+    <input id="deleteBtn" type="submit" value="Remove" />
+</form>
+  
+
+</div>
+<div id="body">
+
+    <h1>Add NEW TRANSACTION</h1>
+
+
+
+    <form action="/new-transaction" method="POST">
+        <input type="text" name="name" placeholder="Enter Transaction Name"/>
+        <input type="text" name="amount" placeholder="Enter Amount"/>
+        <div class="custom-select" style="width:200px;">
+        <select name="category">
+            <option value="0">Select Category:</option>
+            <option value="1">Food</option>
+            <option value="2">School</option>
+            <option value="3">Vehicle</option>
+        </select>
+        </div>
+        <input type="text" name="description" placeholder="Enter description"/>
+
+        <input id="postBtn" type="submit" value="Post"/>
+    </form>
+</div>
+{{/transactions}}
+
+
+</body>
+</html>
