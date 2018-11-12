@@ -5,7 +5,13 @@
 <body>
 <div id="nav-bar">
     <a href="/index"><img src="./logo.png"></img></a>
-</div>
+  <div class='navBar'>
+    <ul>
+      <li><a href='/'>Login</a></li>
+      <li><a href='/index'>Home</a></li>
+      <li><a href='/logout'>Log Out</a></li>
+    </ul>
+  </div>
 <div>
 
 <form action="/select-category" method="POST">
@@ -24,13 +30,12 @@
 </form>
 
 {{#transactions}}
-  
 
     <h3>{{name}}</h3>
     <p>{{amount}}, {{category}}, {{description}}</p>
-    <form action="/delete-shop" method="POST">
+    <form action="/update-post" method="POST">
     <input type="hidden" name="userId" value="{{id}}"/>
-    <input id="deleteBtn" type="submit" value="Remove" />
+    <input type="submit" value="Remove" />
 </form>
 
 
@@ -63,7 +68,6 @@
         </select>
         </div>
         <input type="text" name="description" placeholder="Enter description"/>
-
         <input id="postBtn" type="submit" value="Post"/>
     </form>
 </div>
