@@ -34,7 +34,7 @@ app.post('/login', function(req,res){
     if(userInfo.password == loginPassword){
       console.log('login succesful')
       req.session.userid = userInfo.id
-      res.redirect('/')
+      res.redirect('/index')
 
     } else {
       res.redirect('/login')
@@ -74,8 +74,22 @@ app.listen(3000,function(){
     console.log('Server is running')
 })
 
+app.get('/index',function(req,res){
+
+  if(req.session.userid == null){
+    res.redirect('/login')
+  } else {
+
+  models.transaction.findAll({
+    where: {
+      userid: req.session.userid
+    }
+  }).then(function(transactions){
+      res.render('index',{transactions: transactions})
+  })
+}
+})
+
 app.get('/',function(req,res){
-    models.transaction.findAll().then(function(transactions){
-        res.render('index',{transactions: transactions})
-    })
+  res.redirect('/login')
 })
