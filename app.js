@@ -11,16 +11,14 @@ app.use(session({
   saveUninitialized: true
 }))
 
+
+
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(express.static('public'))
 app.engine('mustache', mustacheExpress())
 app.set("views", "./views")
 app.set("view engine", "mustache")
 
-
-app.get('/login',function(req,res){
-    res.render('login')
-})
 
 app.post('/login', function(req,res){
   let loginUsername = req.body.loginUsername
@@ -37,7 +35,7 @@ app.post('/login', function(req,res){
       res.redirect('/index')
 
     } else {
-      res.redirect('/login')
+      res.redirect('/')
     }
   })
 })
@@ -75,20 +73,37 @@ app.listen(3000,function(){
 })
 
 app.get('/index',function(req,res){
+        if(req.session.userid == null){
+            res.redirect('/')
+          } else {
+        
+          models.transaction.findAll({
+            where: {
+              userid: req.session.userid
+            }
+          }).then(function(transactions){
+              res.render('index',{transactions: transactions})
+          })
+        }
+        })
 
-  if(req.session.userid == null){
-    res.redirect('/login')
-  } else {
 
-  models.transaction.findAll({
-    where: {
-      userid: req.session.userid
-    }
-  }).then(function(transactions){
-      res.render('index',{transactions: transactions})
-  })
-}
+//fetch a particular category
+app.post('/select-category',function(req,res){
+     let ddViewBy = req.body.ddViewBy
+
+     console.log(ddViewBy)
+
+    models.transaction.findAll({
+        where:{
+            category: ddViewBy
+        }
+    }).then(function(category){
+        res.render('index',{category:category})
+    })
 })
+
+
 
 app.get('/logout', (req,res) =>{
   req.session.destroy(function(err){
@@ -97,5 +112,5 @@ app.get('/logout', (req,res) =>{
 })
 
 app.get('/',function(req,res){
-  res.redirect('/login')
+  res.render('login')
 })
