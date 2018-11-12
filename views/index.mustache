@@ -3,8 +3,8 @@
 </head>
 
 <body>
- <div id="nav-bar">
-    <a href="/">View all Transactions</a>
+<div id="nav-bar">
+    <a href="/index"><img src="./logo.png"></img></a>
 </div>
 <div>
 
@@ -38,8 +38,7 @@
 {{/transactions}}
 
 {{#category}}
-<h3>{{name}}</h3>
-<p>{{amount}}, {{category}}, {{description}}</p>
+<h3>{{name}}</h3><p>Amount: ${{amount}}| Category: {{category}}|  Description: {{description}}</p>
 
 {{/category}}
 
