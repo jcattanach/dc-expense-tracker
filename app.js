@@ -90,6 +90,12 @@ app.get('/index',function(req,res){
 }
 })
 
+app.get('/logout', (req,res) =>{
+  req.session.destroy(function(err){
+  })
+  res.redirect('/login')
+})
+
 app.get('/',function(req,res){
   res.redirect('/login')
 })
