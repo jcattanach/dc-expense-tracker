@@ -4,6 +4,8 @@ const mustacheExpress = require('mustache-express')
 const models = require('./models')
 const app = express()
 const session = require('express-session')
+const bcrypt = require('bcrypt')
+const saltRounds = 10
 
 app.use(session({
   secret: '1a2s3d',
@@ -29,15 +31,16 @@ app.post('/login', function(req,res){
        username: loginUsername
     }
   }).then(function(userInfo){
-    if(userInfo.password == loginPassword){
+    bcrypt.compare(loginPassword, userInfo.password, function(err, result) {
+    if(result == true){
       console.log('login succesful')
       req.session.userid = userInfo.id
       res.redirect('/index')
-
-    } else {
+    }else{
       res.redirect('/')
     }
   })
+ })
 })
 
 app.post('/register', function(req,res){
@@ -49,19 +52,27 @@ app.post('/register', function(req,res){
 
 
   if(registerPassword == confirmPassword){
+
+    bcrypt.genSalt(saltRounds, function(err, salt) {
+      bcrypt.hash(registerPassword, salt, function(err, hash) {
+          // Store hash in your password DB.
   let userInfo = models.user.build({
     username: registerUsername,
-    password: registerPassword,
+    password: hash,
     email: registerEmail,
     monthly_income: monthly_income
   })
-
   userInfo.save().then(function(){
     res.redirect('/')
   })
+
+});
+});
+
 }else{
   res.redirect('/register')
 }
+
 })
 
 app.get('/register',function(req,res){
