@@ -4,6 +4,8 @@ const mustacheExpress = require('mustache-express')
 const models = require('./models')
 const app = express()
 
+
+
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(express.static('public'))
 app.engine('mustache', mustacheExpress())
@@ -22,8 +24,24 @@ app.listen(3000,function(){
     console.log('Server is running')
 })
 
-app.get('/',function(req,res){
+app.get('/index',function(req,res){
     models.transaction.findAll().then(function(transactions){
         res.render('index',{transactions: transactions})
+    })
+})
+
+
+//fetch a particular category
+app.post('/select-category',function(req,res){
+     let ddViewBy = req.body.ddViewBy
+
+     console.log(ddViewBy)
+
+    models.transaction.findAll({
+        where:{
+            category: ddViewBy
+        }
+    }).then(function(category){
+        res.render('index',{category:category})
     })
 })
