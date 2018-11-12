@@ -125,3 +125,21 @@ app.get('/logout', (req,res) =>{
 app.get('/',function(req,res){
   res.render('login')
 })
+
+app.post('/new-transaction', function(req, res){
+    let transactionName = req.body.name 
+    let transactionAmount = req.body.amount 
+    let transactionCategory = req.body.category
+    let transactionDescription = req.body.description 
+
+    let newTransaction = models.transaction.build({
+        name: transactionName,
+        amount: transactionAmount,
+        category: transactionCategory,
+        description: transactionDescription
+    })
+    newTransaction.save().then(function(){
+        res.redirect('/')
+    })
+
+})
