@@ -116,7 +116,6 @@ app.post('/select-category',function(req,res){
 })
 
 
-
 app.get('/logout', (req,res) =>{
   req.session.destroy(function(err){
   })
@@ -125,4 +124,27 @@ app.get('/logout', (req,res) =>{
 
 app.get('/',function(req,res){
   res.render('login')
+})
+
+app.post('/new-transaction', function(req, res){
+    let transactionName = req.body.name 
+    let transactionAmount = req.body.amount 
+    let transactionCategory = req.body.category
+    let transactionDescription = req.body.description 
+
+    let newTransaction = models.transaction.build({
+        name: transactionName,
+        amount: transactionAmount,
+        category: transactionCategory,
+        description: transactionDescription,
+        userid: req.session.userid
+    })
+    newTransaction.save().then(function(){
+        res.redirect('/index')
+    })
+
+})
+
+app.post('/update-transaction', function(req,res){
+  
 })
