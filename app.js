@@ -13,13 +13,12 @@ app.use(session({
   saveUninitialized: true
 }))
 
-
-
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(express.static('public'))
 app.engine('mustache', mustacheExpress())
 app.set("views", "./views")
 app.set("view engine", "mustache")
+
 
 
 app.post('/login', function(req,res){
@@ -65,14 +64,12 @@ app.post('/register', function(req,res){
   userInfo.save().then(function(){
     res.redirect('/')
   })
-
 });
 });
 
 }else{
   res.redirect('/register')
 }
-
 })
 
 app.get('/register',function(req,res){
@@ -127,10 +124,10 @@ app.get('/',function(req,res){
 })
 
 app.post('/new-transaction', function(req, res){
-    let transactionName = req.body.name 
-    let transactionAmount = req.body.amount 
+    let transactionName = req.body.name
+    let transactionAmount = req.body.amount
     let transactionCategory = req.body.category
-    let transactionDescription = req.body.description 
+    let transactionDescription = req.body.description
 
     let newTransaction = models.transaction.build({
         name: transactionName,
@@ -142,9 +139,8 @@ app.post('/new-transaction', function(req, res){
     newTransaction.save().then(function(){
         res.redirect('/index')
     })
-
 })
 
 app.post('/update-transaction', function(req,res){
-  
+
 })
