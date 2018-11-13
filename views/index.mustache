@@ -3,6 +3,8 @@
 </head>
 
 <body>
+<div id="nav-bar">
+    <a href="/index"><img src="./logo.png"></img></a>
   <div class='navBar'>
     <ul>
       <li><a href='/'>Login</a></li>
@@ -10,9 +12,6 @@
       <li><a href='/logout'>Log Out</a></li>
     </ul>
   </div>
- <div id="nav-bar">
-    <a href="/index">View all Transactions</a>
-</div>
 <div>
 
 <form action="/select-category" method="POST">
@@ -44,8 +43,7 @@
 {{/transactions}}
 
 {{#category}}
-<h3>{{name}}</h3>
-<p>{{amount}}, {{category}}, {{description}}</p>
+<h3>{{name}}</h3><p>Amount: ${{amount}}| Category: {{category}}|  Description: {{description}}</p>
 
 {{/category}}
 

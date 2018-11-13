@@ -98,19 +98,20 @@ app.get('/index',function(req,res){
 
 //fetch a particular category
 app.post('/select-category',function(req,res){
-     let ddViewBy = req.body.ddViewBy
-
-     console.log(ddViewBy)
-
+    let ddViewBy = req.body.ddViewBy
+    
     models.transaction.findAll({
         where:{
-            category: ddViewBy
+            category: ddViewBy,
+            userid: req.session.userid
         }
     }).then(function(category){
         res.render('index',{category:category})
         console.log(category.amount)
     })
-})
+
+})  
+
 
 
 app.get('/logout', (req,res) =>{
