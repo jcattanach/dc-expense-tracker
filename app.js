@@ -100,7 +100,7 @@ app.get('/index',function(req,res){
 app.post('/select-category',function(req,res){
     let ddViewBy = req.body.ddViewBy
 
-    var category = null
+    var categories = null
 
     if (ddViewBy == "All") {
       res.redirect('index')
@@ -111,11 +111,11 @@ app.post('/select-category',function(req,res){
                 userid: req.session.userid
             }
         }).then(function(result){
-            category = result
-            getOneBudget(category)
+            categories = result
+            getOneBudget(categories)
         })
 
-        function getOneBudget(category){
+        function getOneBudget(categories){
 
 
           models.budget.findOne({
@@ -125,8 +125,18 @@ app.post('/select-category',function(req,res){
             }
           }).then(function(budget){
 
-            if(category && budget){
-            res.render('index',{budget:budget.amount, category:category})}
+            if(categories && budget){
+              let sum = 0
+            for(let i = 0; i < categories.length; i++){
+              sum += categories[i].amount
+            }
+
+            let userBudget = budget.amount
+            let budgetRemaining = userBudget - sum
+            res.render('index',{budgetRemaining:budgetRemaining, budget:budget.amount, category:categories})
+          } else if (budget == null){
+            res.render('index', {category:categories})
+          }
           })
         }
       }
