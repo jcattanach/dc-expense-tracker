@@ -111,6 +111,33 @@ app.post('/select-category',function(req,res){
       }
 })
 
+app.get('/budget',function(req,res){
+  res.render('budget')
+})
+
+app.post('/budget',function(req,res){
+  let foodInput = req.body.foodInput
+  let educationInput = req.body.educationInput
+  let housingInput = req.body.housingInput
+  let transportInput = req.body.transportInput
+  let personalInput = req.body.personalInput
+  let billsInput = req.body.billsInput
+  let otherInput = req.body.otherInput
+
+  let newBudget = models.budget.build({
+      food: foodInput,
+      education: educationInput,
+      housing: housingInput,
+      transportation: transportInput,
+      personal_expenses: personalInput,
+      bills: billsInput,
+      other: otherInput,
+      userid: req.session.userid
+  })
+  newBudget.save().then(function(){
+      res.redirect('/index')
+  })
+})
 
 
 
