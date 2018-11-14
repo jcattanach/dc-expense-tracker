@@ -1,3 +1,30 @@
-#nav-list{
+body{
+    margin:0 !important;
+}
+
+.nav-bar{
+    text-transform: uppercase;
+    font-size:14px;
+    font-family: 'Baloo Paaji', cursive;
     list-style: none;
+
+}
+a{
+    text-decoration:none;
+}
+
+.logo{
+    margin-left: 20px;
+    height: 100px;
+    width: 100px;
+}
+
+#top-bar{
+    background-color:#E8F7E7;
+
+}
+
+div{
+    display:flex;
+    flex-direction: column;
 }

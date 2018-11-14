@@ -3,24 +3,29 @@
   <head>
     <meta charset="utf-8">
     <title>Login</title>
-    <link rel = "stylesheet" type = "text/css" href = "/style.css" />
+    <link href="/style.css" type="text/css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Baloo+Paaji|Poor+Story|Reenie+Beanie|Work+Sans:300,500,700" rel="stylesheet">
   </head>
   <body>
-    <div id="nav-bar">
-        <ul id = "nav-list">
-          <li><a href = "/index"><img src="./logo.png"></img></li>
-          <li><a href='/'>Login</a></li>
-          <li><a href='/index'>Home</a></li>
-          <li><a href='/logout'>Log Out</a></li>
-        </ul>
+  <div id="top-bar">
+    <a href="/index"><img class='logo' src="./logo.png"></img></a>
+  </div>
+    <div class='nav-bar'>
+      <ul>
+        <li><a href='/'>Login</a></li>
+        <li><a href='/index'>Home</a></li>
+        <li><a href='/logout'>Log Out</a></li>
+      </ul>
     </div>
-      <p>Need to register?<a href='/register'>Click here.</a></p>
-    <div class='loginForm'>
-          <form action='/login' method='post'>
-            <input type='text' name='loginUsername' placeholder="Enter username"/>
-            <input type='password' name='loginPassword' placeholder="Enter password"/>
-            <input type='submit' value='Login'/>
-          </form>
-    </div>
+    <h1>Budget Buddy</h1>
+    <p>Need to register?<a href='/register'>Click here.</a></p>
+      <div class='loginForm'>
+        <form action='/login' method='post'>
+          <input type='text' name='loginUsername' placeholder="Enter username"/>
+          <input type='password' name='loginPassword' placeholder="Enter password"/>
+          <input type='submit' value='Login'/>
+        </form>
+      </div>
+      {{message}}
   </body>
 </html>

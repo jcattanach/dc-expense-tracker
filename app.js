@@ -20,7 +20,6 @@ app.set("views", "./views")
 app.set("view engine", "mustache")
 
 
-
 app.post('/login', function(req,res){
   let loginUsername = req.body.loginUsername
   let loginPassword = req.body.loginPassword
@@ -30,16 +29,19 @@ app.post('/login', function(req,res){
        username: loginUsername
     }
   }).then(function(userInfo){
+    if(userInfo == null){
+      res.render('login',{message : 'You username or password is incorrect'})
+    } else {
     bcrypt.compare(loginPassword, userInfo.password, function(err, result) {
     if(result == true){
       console.log('login succesful')
       req.session.userid = userInfo.id
       res.redirect('/index')
     }else{
-      res.redirect('/')
+      res.render('login',{message : 'You username or password is incorrect'})
     }
   })
- })
+}})
 })
 
 app.post('/register', function(req,res){
@@ -66,7 +68,7 @@ app.post('/register', function(req,res){
 });
 
 }else{
-  res.redirect('/register')
+  res.render('register',{ message : 'Your passwords do not match.'})
 }
 })
 
@@ -98,16 +100,76 @@ app.get('/index',function(req,res){
 app.post('/select-category',function(req,res){
     let ddViewBy = req.body.ddViewBy
 
-    models.transaction.findAll({
-        where:{
-            category: ddViewBy,
-            userid: req.session.userid
-        }
-    }).then(function(category){
-        res.render('index',{category:category})
-        console.log(category.amount)
-    })
+    var categories = null
 
+    if (ddViewBy == "All") {
+      res.redirect('index')
+    }else {
+        models.transaction.findAll({
+            where:{
+                category: ddViewBy,
+                userid: req.session.userid
+            }
+        }).then(function(result){
+            categories = result
+            getOneBudget(categories)
+        })
+
+        function getOneBudget(categories){
+
+
+          models.budget.findOne({
+            where:{
+                category: ddViewBy,
+                userid: req.session.userid
+            }
+          }).then(function(budget){
+
+            if(categories && budget){
+              let sum = 0
+            for(let i = 0; i < categories.length; i++){
+              sum += categories[i].amount
+            }
+
+            let userBudget = budget.amount
+            let budgetRemaining = userBudget - sum
+            let message = ''
+            if(budgetRemaining <= 25 && budgetRemaining > 0){
+              let message = 'You have $25 or less remaining in your budget for this category'
+              res.render('index',{message:message, budgetRemaining:budgetRemaining, budget:budget.amount, category:categories})
+            } else if( budgetRemaining == 0){
+              let message = 'You have $0 remaining in your budget for this category'
+              res.render('index',{message:message, budgetRemaining:budgetRemaining, budget:budget.amount, category:categories})
+            } else if( budgetRemaining < 0){
+              let message = 'You are over your limit for this category'
+              res.render('index',{message:message, budgetRemaining:budgetRemaining, budget:budget.amount, category:categories})
+            } else {
+              res.render('index',{budgetRemaining:budgetRemaining, budget:budget.amount, category:categories})
+            }
+          } else if (budget == null){
+            res.render('index', {category:categories})
+          }
+          })
+        }
+      }
+})
+
+app.get('/budget',function(req,res){
+  res.render('budget')
+})
+
+app.post('/budget',function(req,res){
+  let category = req.body.category
+  let amount = req.body.amount
+
+  let newBudget = models.budget.build({
+      category: category,
+      amount: amount,
+      userid: req.session.userid
+  })
+  newBudget.save().then(function(){
+      res.redirect('/index')
+  })
 })
 
 
