@@ -20,7 +20,6 @@ app.set("views", "./views")
 app.set("view engine", "mustache")
 
 
-
 app.post('/login', function(req,res){
   let loginUsername = req.body.loginUsername
   let loginPassword = req.body.loginPassword
@@ -98,7 +97,6 @@ app.get('/index',function(req,res){
 app.post('/select-category',function(req,res){
     let ddViewBy = req.body.ddViewBy
 
-  
     if (ddViewBy == "All") {
       res.redirect('index')
     }else {
@@ -109,11 +107,8 @@ app.post('/select-category',function(req,res){
             }
         }).then(function(category){
             res.render('index',{category:category})
-            
         })
       }
-
-
 })
 
 

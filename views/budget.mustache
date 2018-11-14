@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Budget</title>
+  </head>
+  <body>
+  <div id="nav-bar">
+    <a href="/index"><img src="./logo.png"></img></a>
+  </div>
+    <div class='navBar'>
+      <ul>
+        <li><a href='/'>Login</a></li>
+        <li><a href='/index'>Home</a></li>
+        <li><a href='/logout'>Log Out</a></li>
+      </ul>
+    </div>
+    <h1>Budgets</h1>
+      <div class='budgetForm'>
+        <form action='/budget' method='POST'>
+          <input type='text' name='foodInput' placeholder="Budget for food"/>
+          <input type='text' name='foodInput' placeholder="Budget for education"/>
+          <input type='text' name='foodInput' placeholder="Budget for housing"/>
+          <input type='text' name='foodInput' placeholder="Budget for transportation"/>
+          <input type='text' name='foodInput' placeholder="Budget for personal expenses"/>
+          <input type='text' name='foodInput' placeholder="Budget for bills"/>
+          <input type='text' name='foodInput' placeholder="Budget for other"/>
+          <input type='submit' value='Submit'/>
+        </form>
+      </div>
+  </body>
+</html>
