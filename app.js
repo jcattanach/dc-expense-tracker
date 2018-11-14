@@ -47,7 +47,6 @@ app.post('/register', function(req,res){
   let registerPassword = req.body.registerPassword
   let confirmPassword = req.body.confirmPassword
   let registerEmail = req.body.registerEmail
-  let monthly_income = req.body.monthly_income
 
 
   if(registerPassword == confirmPassword){
@@ -58,8 +57,7 @@ app.post('/register', function(req,res){
   let userInfo = models.user.build({
     username: registerUsername,
     password: hash,
-    email: registerEmail,
-    monthly_income: monthly_income
+    email: registerEmail
   })
   userInfo.save().then(function(){
     res.redirect('/')
@@ -99,7 +97,7 @@ app.get('/index',function(req,res){
 //fetch a particular category
 app.post('/select-category',function(req,res){
     let ddViewBy = req.body.ddViewBy
-    
+
     models.transaction.findAll({
         where:{
             category: ddViewBy,
@@ -110,7 +108,7 @@ app.post('/select-category',function(req,res){
         console.log(category.amount)
     })
 
-})  
+})
 
 
 
