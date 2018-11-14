@@ -100,6 +100,8 @@ app.get('/index',function(req,res){
 app.post('/select-category',function(req,res){
     let ddViewBy = req.body.ddViewBy
 
+    var category = null
+
     if (ddViewBy == "All") {
       res.redirect('index')
     }else {
@@ -108,9 +110,25 @@ app.post('/select-category',function(req,res){
                 category: ddViewBy,
                 userid: req.session.userid
             }
-        }).then(function(category){
-            res.render('index',{category:category})
+        }).then(function(result){
+            category = result
+            getOneBudget(category)
         })
+
+        function getOneBudget(category){
+
+
+          models.budget.findOne({
+            where:{
+                category: ddViewBy,
+                userid: req.session.userid
+            }
+          }).then(function(budget){
+
+            if(category && budget){
+            res.render('index',{budget:budget.amount, category:category})}
+          })
+        }
       }
 })
 
@@ -119,22 +137,12 @@ app.get('/budget',function(req,res){
 })
 
 app.post('/budget',function(req,res){
-  let foodInput = req.body.foodInput
-  let educationInput = req.body.educationInput
-  let housingInput = req.body.housingInput
-  let transportInput = req.body.transportInput
-  let personalInput = req.body.personalInput
-  let billsInput = req.body.billsInput
-  let otherInput = req.body.otherInput
+  let category = req.body.category
+  let amount = req.body.amount
 
   let newBudget = models.budget.build({
-      food: foodInput,
-      education: educationInput,
-      housing: housingInput,
-      transportation: transportInput,
-      personal_expenses: personalInput,
-      bills: billsInput,
-      other: otherInput,
+      category: category,
+      amount: amount,
       userid: req.session.userid
   })
   newBudget.save().then(function(){
