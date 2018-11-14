@@ -102,18 +102,23 @@ app.get('/index',function(req,res){
 //fetch a particular category
 app.post('/select-category',function(req,res){
     let ddViewBy = req.body.ddViewBy
-    
-    models.transaction.findAll({
-        where:{
-            category: ddViewBy,
-            userid: req.session.userid
-        }
-    }).then(function(category){
-        res.render('index',{category:category})
-        console.log(category.amount)
-    })
+  
+    if (ddViewBy == "All") {
+      res.redirect('index')
+    }else {
+        models.transaction.findAll({
+            where:{
+                category: ddViewBy,
+                userid: req.session.userid
+            }
+        }).then(function(category){
+            res.render('index',{category:category})
+            
+        })
+      }
 
 })  
+
 
 
 
