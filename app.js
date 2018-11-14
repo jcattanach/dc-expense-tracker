@@ -133,7 +133,19 @@ app.post('/select-category',function(req,res){
 
             let userBudget = budget.amount
             let budgetRemaining = userBudget - sum
-            res.render('index',{budgetRemaining:budgetRemaining, budget:budget.amount, category:categories})
+            let message = ''
+            if(budgetRemaining <= 25 && budgetRemaining > 0){
+              let message = 'You have $25 or less remaining in your budget for this category'
+              res.render('index',{message:message, budgetRemaining:budgetRemaining, budget:budget.amount, category:categories})
+            } else if( budgetRemaining == 0){
+              let message = 'You have $0 remaining in your budget for this category'
+              res.render('index',{message:message, budgetRemaining:budgetRemaining, budget:budget.amount, category:categories})
+            } else if( budgetRemaining < 0){
+              let message = 'You are over your limit for this category'
+              res.render('index',{message:message, budgetRemaining:budgetRemaining, budget:budget.amount, category:categories})
+            } else {
+              res.render('index',{budgetRemaining:budgetRemaining, budget:budget.amount, category:categories})
+            }
           } else if (budget == null){
             res.render('index', {category:categories})
           }
