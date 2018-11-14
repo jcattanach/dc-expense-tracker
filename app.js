@@ -29,16 +29,19 @@ app.post('/login', function(req,res){
        username: loginUsername
     }
   }).then(function(userInfo){
+    if(userInfo == null){
+      res.render('login',{message : 'You username or password is incorrect'})
+    } else {
     bcrypt.compare(loginPassword, userInfo.password, function(err, result) {
     if(result == true){
       console.log('login succesful')
       req.session.userid = userInfo.id
       res.redirect('/index')
     }else{
-      res.redirect('/')
+      res.render('login',{message : 'You username or password is incorrect'})
     }
   })
- })
+}})
 })
 
 app.post('/register', function(req,res){
@@ -65,7 +68,7 @@ app.post('/register', function(req,res){
 });
 
 }else{
-  res.redirect('/register')
+  res.render('register',{ message : 'Your passwords do not match.'})
 }
 })
 
