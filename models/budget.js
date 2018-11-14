@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     other: DataTypes.FLOAT
   }, {});
   budget.associate = function(models) {
-    // associations can be defined here
+    budget.belongsTo(models.user, {as: 'budget', foreignKey: 'id'})
   };
   return budget;
 };
