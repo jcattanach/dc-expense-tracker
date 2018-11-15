@@ -1,83 +1,79 @@
 <html>
-<head>
-<link href="/style.css" type="text/css" rel="stylesheet">
-<link href="https://fonts.googleapis.com/css?family=Baloo+Paaji|Poor+Story|Reenie+Beanie|Work+Sans:300,500,700" rel="stylesheet">
-</head>
-
-<body>
-<div id="top-bar">
-    <a href="/index"><img class="logo" src="./logo.png"></img></a>
-</div>
+    <head>
+        <link href="/style.css" type="text/css" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Baloo+Paaji|Poor+Story|Reenie+Beanie|Work+Sans:300,500,700" rel="stylesheet">
+    </head>
+    <body>
+        <div id="top-bar">
+            <a href="/user-index"><img class="logo" src="./logo.png"></img></a>
+        </div>
         <div class="nav-bar">
-            <li><a href='/'>Login</a></li>
-            <li><a href='/index'>Home</a></li>
+            <li><a href='/user-settings'>User</a></li>
             <li><a href='/logout'>Log Out</a></li>
-            <li><a href='/budget'>Budget</a></li>
         </div>
-<div>
-  <h3>{{message}}</h3>
-<form action="/select-category" method="POST">
-  <h1>Transactions</h1>
-  <select name="ddViewBy" onchange="this.form.submit();">
-            <option value="0">Select Category:</option>
-            <option value="All">All Expenses</option>
-            <option value="Food">Food</option>
-            <option value="Education">Education</option>
-            <option value="Housing">Housing</option>
-            <option value="Transportation">Transportation</option>
-            <option value="Entertainment">Entertainment</option>
-            <option value="Personal Expenses">Personal Expenses</option>
-            <option value="Bills">Bills</option>
-            <option value="Other">Other</option>
-    </select>
-</form>
-</div>
-<div>
-{{#transactions}}
-   <h3>{{name}}</h3><p>---- Amount: ${{amount}}---- Category: {{category}}--- Description: {{description}}</p>
-    <form action="/update-post" method="POST">
-        <input type="hidden" name="userId" value="{{id}}"/>
-        <input type="submit" value="Remove" />
-    </form>
-{{/transactions}}
-</div>
-
-<div>
-  <h4>Budgeted amount == ${{budget}}</h4>
-  <p>Remaining budget amount == ${{budgetRemaining}}
-{{#category}}
-<h3>{{name}}</h3><p>---- Amount: ${{amount}}---- Category: {{category}}--- Description: {{description}}</p>
- <form action="/update-post" method="POST">
-    <input type="hidden" name="userId" value="{{id}}"/>
-    <input type="submit" value="Remove" />
-</form>
-
-{{/category}}
-</div>
-
-<div id="body">
-    <h1>Add NEW TRANSACTION</h1>
-    <form action="/new-transaction" method="POST">
-        <input type="text" name="name" placeholder="Enter Transaction Name"/>
-        <input type="text" name="amount" placeholder="Enter Amount"/>
-        <div class="custom-select" style="width:200px;">
-        <select name="category">
-            <option value="0">Select Category:</option>
-            <option value="Food">Food</option>
-            <option value="Education">Education</option>
-            <option value="Housing">Housing</option>
-            <option value="Transportation">Transportation</option>
-            <option value="Entertainment">Entertainment</option>
-            <option value="Personal Expenses">Personal Expenses</option>
-            <option value="Bills">Bills</option>
-            <option value="Other">Other</option>
-        </select>
+        <div>
+            <h1>Add NEW TRANSACTION</h1>
+            <form action="/new-transaction" method="POST">
+                <input type="text" name="name" placeholder="Enter Transaction Name"/>
+                <input type="text" name="amount" placeholder="Enter Amount"/>
+                <div class="custom-select" style="width:200px;">
+                    <select name="category">
+                        <option value="0">Select Category:</option>
+                        <option value="Food">Food</option>
+                        <option value="Education">Education</option>
+                        <option value="Housing">Housing</option>
+                        <option value="Transportation">Transportation</option>
+                        <option value="Entertainment">Entertainment</option>
+                        <option value="Personal Expenses">Personal Expenses</option>
+                        <option value="Bills">Bills</option>
+                        <option value="Other">Other</option>
+                    </select>     
+                </div>
+                <input type = "submit" value = "Add Transaction" />
+            </form>
         </div>
-
-<<<<<<< HEAD
+        <div>
+            <h2>Transactions</h2>
+            <h3>Filters</h3>
+            <h3>{{message}}</h3>
+            <form action="/filter-transactions" method="POST">
+                <select name="category"">
+                    <option value="0">Select Category:</option>
+                    <option value="All">All Expenses</option>
+                    <option value="Food">Food</option>
+                    <option value="Education">Education</option>
+                    <option value="Housing">Housing</option>
+                    <option value="Transportation">Transportation</option>
+                    <option value="Entertainment">Entertainment</option>
+                    <option value="Personal Expenses">Personal Expenses</option>
+                    <option value="Bills">Bills</option>
+                    <option value="Other">Other</option>
+                </select>
+                <select name = "timeFilter">
+                    <option value = "all">All</option>
+                    <option value = "today">Today</option>
+                    <option value = "week">This Week</option>
+                    <option value = "month">This Month</option>
+                </select>
+                <input type = "submit" value = "Filter" />
+            </form>
+        </div>
+        <div>
+            {{#transactions}}
+            <h3>{{name}}</h3><p>---- Amount: ${{amount}}---- Category: {{category}}--- Description: {{description}}</p>
+                <form action="/delete-transaction" method="POST">
+                    <input type="hidden" name="id" value="{{id}}"/>
+                    <input type="submit" value="Remove" />
+                </form>
+                <form action  = "/update-transaction" method = "POST">
+                    <input type = "hidden" name = "id" value = "{{id}}" />
+                    <input type = "submit" value = "Update" />
+                </form>
+            {{/transactions}}
+        </div>
+        <div>
+            <h4>Budgeted amount == ${{budget}}</h4>
+            <p>Remaining budget amount == ${{budgetRemaining}}
+        </div>
     </body>
-=======
-
-</body>
->>>>>>> 163328ab8cd2dd528237239958f18ed4d7d6b510
 </html>
