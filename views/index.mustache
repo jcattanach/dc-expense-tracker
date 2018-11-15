@@ -17,8 +17,8 @@
         </div>
 
 <div>
-<form action="/index/{{category}}" method="POST">
-  
+<form action="/select-category" method="POST">
+  <h1>Transactions</h1>
   <select name="ddViewBy" onchange="this.form.submit();">
             <option value="0">Select Category:</option>
             <option value="All">All Expenses</option>
@@ -37,7 +37,7 @@
 
 <div>
 {{#transactions}}
-<h1>Transactions</h1>
+
    <h3>{{name}}</h3><p>---- Amount: ${{amount}}---- Category: {{category}}--- Description: {{description}}</p>
     <form action="/delete-transaction" method="POST">
         <input type="hidden" name="transactionId" value="{{id}}"/>
@@ -80,20 +80,22 @@
 
 
         function evalForm(event){
-
+            
         
             let category = document.getElementById("cat");
             
             let categoryValue = category.options[category.selectedIndex].value
+            console.log("category value",categoryValue)
             
             if (categoryValue == "0"){
+                console.log("y u do dis")
                 let trans_form = document.getElementById("new-transaction-form")
                    event.preventDefault() 
                    popupS.alert({
-                       content:'Hello'
+                       content:'Please select category'
                    })
-
             }else {
+                console.log("submitting form")
                 document.getElementById("new-transaction-form").submit()
             };
         }
@@ -103,7 +105,7 @@
         </div>
         <input type="text" name="description" placeholder="Enter description"/>
         {{! <button onclick="addCategory(event)">Post 2</button> }}
-        <input id="postBtn" type="submit" value="Post" onclick="evalForm(event)"/>
+        <input id="postBtn" type="button" value="Post" onclick="evalForm(event)"/>
     </form>
 </div>
 

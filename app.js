@@ -95,7 +95,7 @@ app.get('/index',function(req,res){
 
 
 //fetch a particular category
-app.post('/:category',function(req,res){
+app.post('/select-category',function(req,res){
     let ddViewBy = req.body.ddViewBy
   
     if (ddViewBy == "All") {
@@ -129,18 +129,16 @@ app.get('/',function(req,res){
 
 
 app.post('/new-transaction', function(req, res){
+
     let transactionName = req.body.name
     let transactionAmount = req.body.amount
     let transactionCategory = req.body.category
     let transactionDescription = req.body.description
 
-    if (transactionCategory == "0"){
-      console.log("Incorrect selection!")
-      // popupS.alert({
-      //   content: 'Hello'
-      // })
-
-    }else{
+    // if (transactionCategory == "0"){
+    //   console.log("Incorrect selection!")
+      
+    // }else{
 
       let newTransaction = models.transaction.build({
           name: transactionName,
@@ -153,7 +151,7 @@ app.post('/new-transaction', function(req, res){
         res.redirect('/index')
     })
   
-  }
+  
 })
 
 
