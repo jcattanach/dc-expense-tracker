@@ -35,7 +35,6 @@
         <div>
             <h2>Transactions</h2>
             <h3>Filters</h3>
-            <h3>{{message}}</h3>
             <form action="/filter-transactions" method="POST">
                 <select name="category">
                     <option value="0">Select Category:</option>
@@ -60,6 +59,7 @@
         </div>
         <div>
           <h4>{{budgetUpdate}}</h4>
+          <h4>{{message}}</h4>
           </div>
         <div>
             {{#transactions}}
