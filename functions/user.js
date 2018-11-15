@@ -32,7 +32,7 @@ module.exports = {
             })
         })
     },
-    // returns one user object 
+    // returns one user object
     // input: username
     getUserByUsername: function(username){
         return new Promise(function(resolve, reject){
@@ -147,5 +147,25 @@ module.exports = {
                 resject(error)
             })
         })
-    }
+    },
+    updateUserPassword: function(userid, password){
+        return new Promise(function(resolve, reject){
+            models.user.update({
+                password: password
+              },
+              {
+                  where :
+                  {
+                      id:userid
+                  }
+              }
+            )
+            .then(function(){
+                resolve()
+            })
+            .catch(function(error){
+                resject(error)
+            })
+        })
+    },
 }
