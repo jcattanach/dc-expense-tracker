@@ -85,7 +85,6 @@ app.post('/filter-transactions',function(req,res){
   functions.transaction.filterByTimeAndCategory(userid, category, timeFilter)
   .then(function(results){
         categories = results
-        console.log(categories)
         getOneBudget(categories)
   })
   .catch(function(error){
@@ -101,6 +100,7 @@ app.post('/filter-transactions',function(req,res){
       }
     }).then(function(budget){
 
+      let budgetUpdate = ''
       if(categories && budget){
         let sum = 0
       for(let i = 0; i < categories.length; i++){
@@ -109,18 +109,19 @@ app.post('/filter-transactions',function(req,res){
 
       let userBudget = budget.amount
       let budgetRemaining = userBudget - sum
+      budgetUpdate = `You weekly budget is $${userBudget}. You have $${budgetRemaining} remaining.`
       let message = ''
       if(budgetRemaining <= 25 && budgetRemaining > 0){
         let message = 'You have $25 or less remaining in your budget for this category'
-        res.render('index',{message:message, budgetRemaining:budgetRemaining, budget:budget.amount, transactions:categories})
+        res.render('index',{message:message, budgetUpdate:budgetUpdate, transactions:categories})
       } else if( budgetRemaining == 0){
         let message = 'You have $0 remaining in your budget for this category'
-        res.render('index',{message:message, budgetRemaining:budgetRemaining, budget:budget.amount, transactions:categories})
+        res.render('index',{message:message, budgetUpdate:budgetUpdate, transactions:categories})
       } else if( budgetRemaining < 0){
         let message = 'You are over your limit for this category'
-        res.render('index',{message:message, budgetRemaining:budgetRemaining, budget:budget.amount, transactions:categories})
+        res.render('index',{message:message, budgetUpdate:budgetUpdate, transactions:categories})
       } else {
-        res.render('index',{budgetRemaining:budgetRemaining, budget:budget.amount, transactions:categories})
+        res.render('index',{budgetUpdate:budgetUpdate, transactions:categories})
       }
     } else if (budget == null){
       res.render('index', {transactions:categories})

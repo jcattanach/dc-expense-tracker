@@ -59,6 +59,9 @@
             </form>
         </div>
         <div>
+          <h4>{{budgetUpdate}}</h4>
+          </div>
+        <div>
             {{#transactions}}
             <h3>{{name}}</h3><p>---- Amount: ${{amount}}---- Category: {{category}}--- Description: {{description}}</p>
                 <form action="/delete-transaction" method="POST">
@@ -70,10 +73,6 @@
                     <input type = "submit" value = "Update" />
                 </form>
             {{/transactions}}
-        </div>
-        <div>
-            <h4>Budgeted amount == ${{budget}}</h4>
-            <p>Remaining budget amount == ${{budgetRemaining}}
         </div>
     </body>
 </html>
