@@ -71,20 +71,20 @@ module.exports = {
         })
     },
     // updates budget amount
-    // input: 
     updateBudget: function(userid, category, amount){
         return new Promise(function(resolve, reject){
-            models.budget.findOne({
-                where:{
-                    userid: userid,
-                    category: category
-                }
-            })
-            .then(function(budget){
-                transaction.updateAttributes({
+            models.budget.update({
                     amount: amount
-                })
-            }).then(function(){
+                   
+                },
+                {
+                    where: {
+                        userid: userid,
+                        category: category
+                    }
+                }
+            )
+            .then(function(){
                 resolve()
             })
             .catch(function(error){
