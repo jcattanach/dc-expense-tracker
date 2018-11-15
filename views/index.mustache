@@ -2,6 +2,8 @@
 <head>
 <link href="/style.css" type="text/css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Baloo+Paaji|Poor+Story|Reenie+Beanie|Work+Sans:300,500,700" rel="stylesheet">
+<link rel="stylesheet" href="/popupS.min.css">
+
 </head>
 
 <body>
@@ -13,9 +15,10 @@
             <li><a href='/index'>Home</a></li>
             <li><a href='/logout'>Log Out</a></li>
         </div>
+
 <div>
-<form action="/select-category" method="POST">
-  <h1>Transactions</h1>
+<form action="/index/{{category}}" method="POST">
+  
   <select name="ddViewBy" onchange="this.form.submit();">
             <option value="0">Select Category:</option>
             <option value="All">All Expenses</option>
@@ -31,21 +34,25 @@
 </form>
 </div>
 
+
 <div>
 {{#transactions}}
+<h1>Transactions</h1>
    <h3>{{name}}</h3><p>---- Amount: ${{amount}}---- Category: {{category}}--- Description: {{description}}</p>
-    <form action="/update-post" method="POST">
-        <input type="hidden" name="userId" value="{{id}}"/>
+    <form action="/delete-transaction" method="POST">
+        <input type="hidden" name="transactionId" value="{{id}}"/>
         <input type="submit" value="Remove" />
     </form>
 {{/transactions}}
 </div>
 
 <div>
+
 {{#category}}
 <h3>{{name}}</h3><p>---- Amount: ${{amount}}---- Category: {{category}}--- Description: {{description}}</p>
- <form action="/update-post" method="POST">
-    <input type="hidden" name="userId" value="{{id}}"/>
+    <form action="/delete-transaction" method="POST">
+    <input type="hidden" name="transactionId" value="{{id}}"/>
+    <input type="hidden" name="category" value="{{category}}"/>
     <input type="submit" value="Remove" />
 </form>
 
@@ -54,11 +61,11 @@
 
 <div id="body">
     <h1>Add NEW TRANSACTION</h1>
-    <form action="/new-transaction" method="POST">
+    <form id="new-transaction-form" action="/new-transaction" method="POST">
         <input type="text" name="name" placeholder="Enter Transaction Name"/>
         <input type="text" name="amount" placeholder="Enter Amount"/>
         <div class="custom-select" style="width:200px;">
-        <select name="category">
+        <select  id="cat" name="category">
             <option value="0">Select Category:</option>
             <option value="Food">Food</option>
             <option value="Education">Education</option>
@@ -69,12 +76,38 @@
             <option value="Bills">Bills</option>
             <option value="Other">Other</option>
         </select>
+        <script>
+
+
+        function evalForm(event){
+
+        
+            let category = document.getElementById("cat");
+            
+            let categoryValue = category.options[category.selectedIndex].value
+            
+            if (categoryValue == "0"){
+                let trans_form = document.getElementById("new-transaction-form")
+                   event.preventDefault() 
+                   popupS.alert({
+                       content:'Hello'
+                   })
+
+            }else {
+                document.getElementById("new-transaction-form").submit()
+            };
+        }
+        
+        
+        </script>
         </div>
         <input type="text" name="description" placeholder="Enter description"/>
-        <input id="postBtn" type="submit" value="Post"/>
+        {{! <button onclick="addCategory(event)">Post 2</button> }}
+        <input id="postBtn" type="submit" value="Post" onclick="evalForm(event)"/>
     </form>
 </div>
 
 
 </body>
+<script src="/popupS.min.js"></script>
 </html>

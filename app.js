@@ -13,13 +13,12 @@ app.use(session({
   saveUninitialized: true
 }))
 
-
-
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(express.static('public'))
 app.engine('mustache', mustacheExpress())
 app.set("views", "./views")
 app.set("view engine", "mustache")
+
 
 
 app.post('/login', function(req,res){
@@ -48,7 +47,6 @@ app.post('/register', function(req,res){
   let registerPassword = req.body.registerPassword
   let confirmPassword = req.body.confirmPassword
   let registerEmail = req.body.registerEmail
-  let monthly_income = req.body.monthly_income
 
 
   if(registerPassword == confirmPassword){
@@ -59,20 +57,17 @@ app.post('/register', function(req,res){
   let userInfo = models.user.build({
     username: registerUsername,
     password: hash,
-    email: registerEmail,
-    monthly_income: monthly_income
+    email: registerEmail
   })
   userInfo.save().then(function(){
     res.redirect('/')
   })
-
 });
 });
 
 }else{
   res.redirect('/register')
 }
-
 })
 
 app.get('/register',function(req,res){
@@ -100,7 +95,7 @@ app.get('/index',function(req,res){
 
 
 //fetch a particular category
-app.post('/select-category',function(req,res){
+app.post('/:category',function(req,res){
     let ddViewBy = req.body.ddViewBy
   
     if (ddViewBy == "All") {
@@ -117,7 +112,7 @@ app.post('/select-category',function(req,res){
         })
       }
 
-})  
+})
 
 
 
@@ -132,25 +127,63 @@ app.get('/',function(req,res){
   res.render('login')
 })
 
-app.post('/new-transaction', function(req, res){
-    let transactionName = req.body.name 
-    let transactionAmount = req.body.amount 
-    let transactionCategory = req.body.category
-    let transactionDescription = req.body.description 
 
-    let newTransaction = models.transaction.build({
-        name: transactionName,
-        amount: transactionAmount,
-        category: transactionCategory,
-        description: transactionDescription,
-        userid: req.session.userid
+app.post('/new-transaction', function(req, res){
+    let transactionName = req.body.name
+    let transactionAmount = req.body.amount
+    let transactionCategory = req.body.category
+    let transactionDescription = req.body.description
+
+    if (transactionCategory == "0"){
+      console.log("Incorrect selection!")
+      // popupS.alert({
+      //   content: 'Hello'
+      // })
+
+    }else{
+
+      let newTransaction = models.transaction.build({
+          name: transactionName,
+          amount: transactionAmount,
+          category: transactionCategory,
+          description: transactionDescription,
+          userid: req.session.userid
     })
     newTransaction.save().then(function(){
         res.redirect('/index')
     })
+  
+  }
+})
+
+
+app.post('/update-transaction', function(req,res){
 
 })
 
-app.post('/update-transaction', function(req,res){
-  
+app.post('/delete-transaction',function (req,res){
+
+  let transactionId = req.body.transactionId
+  let ddViewBy = req.body.category
+ 
+  models.transaction.destroy({
+    where:{
+      id: transactionId,
+      userid: req.session.userid
+    }
+  }).then(function(){
+    let ddViewBy = req.body.ddViewBy
+
+    models.transaction.findAll({
+      where:{
+          category: ddViewBy,
+          userid: req.session.userid
+      }
+  }).then(function(category){
+      res.render('index',{category:category})
+      
+  })
+      
+    
+  })
 })
