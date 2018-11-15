@@ -160,13 +160,15 @@ app.get('/user-budgets',function(req,res){
     })
 })
 
-app.post('/budget',function(req,res){
+app.post('/update-budget',function(req,res){
   let category = req.body.category
+  let userid = req.session.userid
   let amount = req.body.amount
+  console.log(amount)
 
-  functions.budget.addNewUserBudget(req.session.userid, category, amount)
+  functions.budget.updateBudget(userid, category, amount)
   .then(function(){
-      res.redirect('/user-index')
+      res.redirect('user-budgets')
   })
   .catch(function(error){
       console.log(error)

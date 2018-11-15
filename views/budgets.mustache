@@ -16,14 +16,14 @@
       </ul>
     </div>
     <ul>
-      <li><a href = "/user-budgets">Budgets</a></li>
       <li><a href = "/user-settings">Account Details</a></li>
+      <li><a href = "/user-budgets">Budgets</a></li>
     </ul>
     <table>
     {{#budgets}}
       <tr>
         <th>Category</th>
-        <th>Amount</th>\
+        <th>Amount</th>
       </tr>
       <tr>
         <td>
@@ -31,8 +31,11 @@
         </td>
         <td>
           <div class='budgetForm'>
-            <form action='/budget' method='POST'>
-              <input type = "text" value = "{{amount}}" />
+            <form action='/update-budget' method='POST'>
+              <input type = "hidden" name = "budgetid" value = "{{id}}" />
+              <input type = "hidden" name = "category" value = "{{category}}" />
+              <input type = "text" name="amount" value = "{{amount}}" />
+              <input type = "submit" value = "Update Budget" />
             </form>
           </div>
         </td>

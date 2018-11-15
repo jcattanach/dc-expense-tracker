@@ -103,8 +103,27 @@ module.exports = {
         })
     },
     updateUser: function(userid, password = null, email = null){
+        if (password == null)
+        {
+            password = models.user.findOne({
+                where: {
+                    id: userid
+                }
+            }).get({plain: true})
+        }
+        if (email == null){
+            email = models.user.findOne({
+                where: {
+                    id: userid
+                }
+            }).get({plain: true})
+        }
         return new Promise(function(resolve, reject){
-            models.user.fineOne({
+            models.user.update({
+                password: password,
+                email: email
+            },
+            {
                 where: {
                     id: userid
                 }
