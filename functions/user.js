@@ -88,11 +88,11 @@ module.exports = {
     },
     // removes user from user table
     // input: username
-    deleteUserByUsername: function(username){
+    deleteUserByUserID: function(userid){
         return new Promise(function(resolve, reject){
             models.user.destroy({
                 where:{
-                    username: username
+                    id: userid
                 }
             }).then(function(){
                 resolve()

@@ -59,10 +59,6 @@ app.post('/register', function(req,res){
     let confirmPassword = req.body.confirmPassword
     let email = req.body.registerEmail
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 0feb9e6d64317a3aa00f7e7b46419c3153f134f8
     if(password == confirmPassword){
         functions.user.addNewUser(username, password, email)
         .then(function(userid){
@@ -235,8 +231,14 @@ app.get('/logout', (req,res) =>{
     res.redirect('/')
   })
 
+app.post('/delete-account', function(req,res){
+  let userid = req.session.userid
+  functions.user.deleteUserByUserID(userid)
+  res.redirect('/logout')
+})
+
 app.get('/delete-account', function(req,res){
-  res.render('account-info')
+  res.render('delete-account')
 })
 
 app.post('/update-password', function(req,res){
