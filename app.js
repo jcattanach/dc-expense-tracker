@@ -59,10 +59,6 @@ app.post('/register', function(req,res){
     let confirmPassword = req.body.confirmPassword
     let email = req.body.registerEmail
 
-<<<<<<< HEAD
-
-=======
->>>>>>> 0feb9e6d64317a3aa00f7e7b46419c3153f134f8
     if(password == confirmPassword){
         functions.user.addNewUser(username, password, email)
         .then(function(userid){
