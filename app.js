@@ -137,7 +137,21 @@ app.post('/filter-transactions',function(req,res){
 })
 
 app.get('/user-settings',function(req,res){
-  res.render('settings')
+    functions.user.getUserById(req.session.userid)
+    .then(function(user){
+        res.render('account-info', {user: user})
+    })
+})
+
+app.get('/user-budgets',function(req,res){
+    functions.budget.getAllUserBudgets(req.session.userid)
+    .then(function(budgets){
+        console.log(budgets)
+        res.render('budgets', {budgets: budgets})
+    })
+    .catch(function(error){
+        console.log(error)
+    })
 })
 
 app.post('/budget',function(req,res){
