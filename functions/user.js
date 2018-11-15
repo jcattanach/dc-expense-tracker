@@ -61,7 +61,7 @@ module.exports = {
                     })
                     newUser.save()
                     .then(function(){
-                        resolve()
+                        resolve(newUser.id)
                     })
                     .catch(function(error){
                         reject(error)
