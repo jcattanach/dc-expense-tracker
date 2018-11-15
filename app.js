@@ -37,6 +37,7 @@ app.post('/login', function(req,res){
             if(result == true){
                 console.log('login succesful')
                 req.session.userid = userInfo.id
+                req.session.username = userInfo.username
                 res.redirect('/user-index')
             }else{
                 res.render('login',{message : 'You username or password is incorrect'})
@@ -72,7 +73,7 @@ app.get('/user-index',function(req,res){
         res.redirect('/')
     }else {
         functions.transaction.getAllUserTransactions(userid).then(function(transactions){
-            res.render('index',{transactions: transactions})
+            res.render('index',{transactions: transactions, username:req.session.username})
         })
     }
 })
@@ -92,9 +93,9 @@ app.post('/filter-transactions',function(req,res){
           weekFilter(category, userid)
     })
     .catch(function(error){
-  
+
     })}
-  
+
   function weekFilter(category, userid){
     functions.transaction.filterByTimeAndCategory(userid, category, 'week')
     .then(function(newResult){
@@ -116,7 +117,7 @@ app.post('/filter-transactions',function(req,res){
       for(let i = 0; i < newResult.length; i++){
         sum += newResult[i].amount
       }
-      
+
       let userBudget = budget.amount
       let budgetRemaining = userBudget - sum
       budgetUpdate = `You weekly budget is $${userBudget}. You have $${budgetRemaining} remaining.`
@@ -141,6 +142,8 @@ app.post('/filter-transactions',function(req,res){
 })
 
 app.get('/user-settings',function(req,res){
+  res.render('settings', { username:req.session.username})
+
     functions.user.getUserById(req.session.userid)
     .then(function(user){
         res.render('account-info', {user: user})
@@ -196,8 +199,8 @@ app.post('/delete-transaction', function(req, res){
     .catch(function(error){
         console.log(error)
     })
-  
-  
+
+
 })
 
 app.post('/update-transaction', function(req, res){
@@ -219,5 +222,3 @@ app.get('/logout', (req,res) =>{
 app.listen(3000,function(){
     console.log('Server is running')
 })
-
-
