@@ -7,21 +7,19 @@
     <link href="https://fonts.googleapis.com/css?family=Baloo+Paaji|Poor+Story|Reenie+Beanie|Work+Sans:300,500,700" rel="stylesheet">
   </head>
   <body>
-  <div id="top-bar">
-    <a href="/index"><img class='logo' src="./logo.png"></img></a>
-  </div>
+    <div id="top-bar">
+      <a href="/user-index"><img class='logo' src="./logo.png"></img></a>
+    </div>
     <div class='nav-bar'>
       <ul>
-        <li><a href='/'>Login</a></li>
-        <li><a href='/index'>Home</a></li>
         <li><a href='/logout'>Log Out</a></li>
       </ul>
     </div>
     <h1>Budgets</h1>
-      <div class='budgetForm'>
-        <form action='/budget' method='POST'>
-          <input type="text" name="amount" placeholder="Enter Amount"/>
-          <div class="custom-select" style="width:200px;">
+    <div class='budgetForm'>
+      <form action='/budget' method='POST'>
+        <input type="text" name="amount" placeholder="Enter Amount"/>
+        <div class="custom-select" style="width:200px;">
           <select name="category">
               <option value="0">Select Category:</option>
               <option value="Food">Food</option>
@@ -36,6 +34,6 @@
           <input type='submit' value='Submit'/>
         </div>
       </form>
-      </div>
+    </div>
   </body>
 </html>

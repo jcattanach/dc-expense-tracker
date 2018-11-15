@@ -2,10 +2,10 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const mustacheExpress = require('mustache-express')
 const models = require('./models')
+const functions = require('./functions')
 const app = express()
 const session = require('express-session')
 const bcrypt = require('bcrypt')
-const saltRounds = 10
 
 app.use(session({
   secret: '1a2s3d',
@@ -19,189 +19,138 @@ app.engine('mustache', mustacheExpress())
 app.set("views", "./views")
 app.set("view engine", "mustache")
 
+app.get('/',function(req,res){
+    res.render('login')
+  })
 
 app.post('/login', function(req,res){
-  let loginUsername = req.body.loginUsername
-  let loginPassword = req.body.loginPassword
+  let username = req.body.loginUsername
+  let password = req.body.loginPassword
 
-  models.user.findOne({
-    where : {
-       username: loginUsername
-    }
-  }).then(function(userInfo){
+  functions.user.getUserByUsername(username)
+  .then(function(userInfo){
     if(userInfo == null){
       res.render('login',{message : 'You username or password is incorrect'})
-    } else {
-    bcrypt.compare(loginPassword, userInfo.password, function(err, result) {
-    if(result == true){
-      console.log('login succesful')
-      req.session.userid = userInfo.id
-      res.redirect('/index')
-    }else{
-      res.render('login',{message : 'You username or password is incorrect'})
-    }
-  })
-}})
-})
-
-app.post('/register', function(req,res){
-  let registerUsername = req.body.registerUsername
-  let registerPassword = req.body.registerPassword
-  let confirmPassword = req.body.confirmPassword
-  let registerEmail = req.body.registerEmail
-
-
-  if(registerPassword == confirmPassword){
-
-    bcrypt.genSalt(saltRounds, function(err, salt) {
-      bcrypt.hash(registerPassword, salt, function(err, hash) {
-          // Store hash in your password DB.
-  let userInfo = models.user.build({
-    username: registerUsername,
-    password: hash,
-    email: registerEmail
-  })
-  userInfo.save().then(function(){
-    res.redirect('/')
-  })
-});
-});
-
-}else{
-  res.render('register',{ message : 'Your passwords do not match.'})
-}
+    } 
+    else {
+        bcrypt.compare(password, userInfo.password, function(err, result) {
+            if(result == true){
+                console.log('login succesful')
+                req.session.userid = userInfo.id
+                res.redirect('/user-index')
+            }else{
+                res.render('login',{message : 'You username or password is incorrect'})
+            }
+        })
+    }})
 })
 
 app.get('/register',function(req,res){
     res.render('register')
 })
 
-app.listen(3000,function(){
-    console.log('Server is running')
-})
+app.post('/register', function(req,res){
+    let username = req.body.registerUsername
+    let password = req.body.registerPassword
+    let confirmPassword = req.body.confirmPassword
+    let email = req.body.registerEmail
 
-app.get('/index',function(req,res){
-    if(req.session.userid == null){
-        res.redirect('/')
-      } else {
-
-      models.transaction.findAll({
-        where: {
-          userid: req.session.userid
-        }
-      }).then(function(transactions){
-          res.render('index',{transactions: transactions})
-      })
+    if(registerPassword == confirmPassword){
+        functions.user.addNewUser(username, password, email)
+        .then(function(){
+            res.redirect('/')
+        })
+    }
+    else{
+        res.render('register',{ message : 'Your passwords do not match.'})
     }
 })
 
-
-//fetch a particular category
-app.post('/select-category',function(req,res){
-    let ddViewBy = req.body.ddViewBy
-
-    var categories = null
-
-    if (ddViewBy == "All") {
-      res.redirect('index')
+app.get('/user-index',function(req,res){
+    let userid = req.session.userid
+    if( userid == null){
+        res.redirect('/')
     }else {
-        models.transaction.findAll({
-            where:{
-                category: ddViewBy,
-                userid: req.session.userid
-            }
-        }).then(function(result){
-            categories = result
-            getOneBudget(categories)
+        functions.transaction.getAllUserTransactions(userid).then(function(transactions){
+            res.render('index',{transactions: transactions})
         })
-
-        function getOneBudget(categories){
-
-
-          models.budget.findOne({
-            where:{
-                category: ddViewBy,
-                userid: req.session.userid
-            }
-          }).then(function(budget){
-
-            if(categories && budget){
-              let sum = 0
-            for(let i = 0; i < categories.length; i++){
-              sum += categories[i].amount
-            }
-
-            let userBudget = budget.amount
-            let budgetRemaining = userBudget - sum
-            let message = ''
-            if(budgetRemaining <= 25 && budgetRemaining > 0){
-              let message = 'You have $25 or less remaining in your budget for this category'
-              res.render('index',{message:message, budgetRemaining:budgetRemaining, budget:budget.amount, category:categories})
-            } else if( budgetRemaining == 0){
-              let message = 'You have $0 remaining in your budget for this category'
-              res.render('index',{message:message, budgetRemaining:budgetRemaining, budget:budget.amount, category:categories})
-            } else if( budgetRemaining < 0){
-              let message = 'You are over your limit for this category'
-              res.render('index',{message:message, budgetRemaining:budgetRemaining, budget:budget.amount, category:categories})
-            } else {
-              res.render('index',{budgetRemaining:budgetRemaining, budget:budget.amount, category:categories})
-            }
-          } else if (budget == null){
-            res.render('index', {category:categories})
-          }
-          })
-        }
-      }
+    }
 })
 
-app.get('/budget',function(req,res){
-  res.render('budget')
+//fetch a particular category
+app.post('/filter-transactions',function(req,res){
+  let userid = req.session.userid
+  let category = req.body.category
+  let timeFilter = req.body.timeFilter
+  functions.transaction.filterByTimeAndCategory(userid, category, timeFilter)
+  .then(function(results){
+        res.render('index', {transactions: results})
+  })
+  .catch(function(error){
+
+  })
+})
+
+app.get('/user-settings',function(req,res){
+  res.render('settings')
 })
 
 app.post('/budget',function(req,res){
   let category = req.body.category
   let amount = req.body.amount
 
-  let newBudget = models.budget.build({
-      category: category,
-      amount: amount,
-      userid: req.session.userid
-  })
-  newBudget.save().then(function(){
+  functions.budget.addNewUserBudget(req.session.userid, category, amount)
+  .then(function(){
       res.redirect('/index')
   })
-})
-
-
-
-app.get('/logout', (req,res) =>{
-  req.session.destroy(function(err){
+  .catch(function(error){
+      console.log(error)
   })
-  res.redirect('/')
-})
-
-app.get('/',function(req,res){
-  res.render('login')
 })
 
 app.post('/new-transaction', function(req, res){
-    let transactionName = req.body.name
-    let transactionAmount = req.body.amount
-    let transactionCategory = req.body.category
-    let transactionDescription = req.body.description
+    let userid = req.session.userid
+    let name = req.body.name
+    let amount = req.body.amount
+    let category = req.body.category
+    let description = req.body.description
 
-    let newTransaction = models.transaction.build({
-        name: transactionName,
-        amount: transactionAmount,
-        category: transactionCategory,
-        description: transactionDescription,
-        userid: req.session.userid
+    functions.transaction.addNewTransaction(userid, name, amount, category, description)
+    .then(function(){
+        res.redirect('/user-index')
     })
-    newTransaction.save().then(function(){
-        res.redirect('/index')
+    .catch(function(error){
+        console.log(error)
     })
 })
 
-app.post('/update-transaction', function(req,res){
+app.post('/delete-transaction', function(req, res){
+    let transactionid = req.body.id
+    functions.transaction.deleteTransaction(transactionid)
+    .then(function(){
+        res.redirect('/user-index')
+    })
+    .catch(function(error){
+        console.log(error)
+    })
+})
 
+app.post('/update-transaction', function(req, res){
+    // functions.transaction.getByTransactionId(req.body.id)
+    // .then(function(transaction){
+    //     transaction.updateAttributes{
+
+    //     }
+    // })
+    console.log("work in progress")
+})
+
+app.get('/logout', (req,res) =>{
+    req.session.destroy(function(err){
+    })
+    res.redirect('/')
+  })
+
+app.listen(3000,function(){
+    console.log('Server is running')
 })
