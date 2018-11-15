@@ -6,6 +6,7 @@ const functions = require('./functions')
 const app = express()
 const session = require('express-session')
 const bcrypt = require('bcrypt')
+const saltRounds = 10
 
 app.use(session({
   secret: '1a2s3d',
@@ -56,7 +57,7 @@ app.post('/register', function(req,res){
     let confirmPassword = req.body.confirmPassword
     let email = req.body.registerEmail
 
-    if(registerPassword == confirmPassword){
+    if(password == confirmPassword){
         functions.user.addNewUser(username, password, email)
         .then(function(){
             res.redirect('/')
@@ -142,8 +143,6 @@ app.post('/filter-transactions',function(req,res){
 })
 
 app.get('/user-settings',function(req,res){
-  res.render('settings', { username:req.session.username})
-
     functions.user.getUserById(req.session.userid)
     .then(function(user){
         res.render('account-info', {user: user})
@@ -218,6 +217,42 @@ app.get('/logout', (req,res) =>{
     })
     res.redirect('/')
   })
+
+app.get('/delete-account', function(req,res){
+  res.render('account-info')
+})
+
+app.post('/update-password', function(req,res){
+  let newPassword = req.body.newPassword
+  let confirmPassword = req.body.confirmPassword
+  let oldPassword = req.body.oldPassword
+
+  if(newPassword == confirmPassword){
+  functions.user.getUserById(req.session.userid)
+  .then(function(userInfo){
+    let dbPassword = userInfo.password
+    bcrypt.compare(oldPassword, dbPassword, function(err, result) {
+        if(result == true){
+            res.render('update-password',{message : 'Password updated'})
+            bcrypt.genSalt(saltRounds, function(err, salt){
+                bcrypt.hash(newPassword, salt, function(err, hash){
+                functions.user.updateUserPassword(req.session.userid, hash)
+              })
+            })
+
+        }else{
+            res.render('update-password',{message : 'Old password is incorrect'})
+        }
+    })
+  })} else {
+    let message = 'Your new passwords do not match'
+    res.render('update-password',{ message:message})
+  }
+})
+
+app.get('/update-password', function(req,res){
+  res.render('update-password')
+})
 
 app.listen(3000,function(){
     console.log('Server is running')
