@@ -82,15 +82,19 @@ app.post('/filter-transactions',function(req,res){
   let userid = req.session.userid
   let category = req.body.category
   let timeFilter = req.body.timeFilter
-  functions.transaction.filterByTimeAndCategory(userid, category, timeFilter)
-  .then(function(results){
-        categories = results
-        // getOneBudget(categories)
-        weekFilter(category, userid)
-  })
-  .catch(function(error){
 
-  })
+  if (category== "All"){
+    res.redirect('/user-index')
+  }else{functions.transaction.filterByTimeAndCategory(userid, category, timeFilter)
+    .then(function(results){
+          categories = results
+          // getOneBudget(categories)
+          weekFilter(category, userid)
+    })
+    .catch(function(error){
+  
+    })}
+  
   function weekFilter(category, userid){
     functions.transaction.filterByTimeAndCategory(userid, category, 'week')
     .then(function(newResult){
@@ -192,6 +196,8 @@ app.post('/delete-transaction', function(req, res){
     .catch(function(error){
         console.log(error)
     })
+  
+  
 })
 
 app.post('/update-transaction', function(req, res){
@@ -213,3 +219,5 @@ app.get('/logout', (req,res) =>{
 app.listen(3000,function(){
     console.log('Server is running')
 })
+
+
