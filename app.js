@@ -85,13 +85,18 @@ app.post('/filter-transactions',function(req,res){
   functions.transaction.filterByTimeAndCategory(userid, category, timeFilter)
   .then(function(results){
         categories = results
-        getOneBudget(categories)
+        // getOneBudget(categories)
+        weekFilter(category, userid)
   })
   .catch(function(error){
 
   })
-  function getOneBudget(categories){
-
+  function weekFilter(category, userid){
+    functions.transaction.filterByTimeAndCategory(userid, category, 'week')
+    .then(function(newResult){
+      getOneBudget(categories, newResult)
+    })}
+  function getOneBudget(categories, newResult){
 
     models.budget.findOne({
       where:{
@@ -101,12 +106,13 @@ app.post('/filter-transactions',function(req,res){
     }).then(function(budget){
 
       let budgetUpdate = ''
+
       if(categories && budget){
         let sum = 0
-      for(let i = 0; i < categories.length; i++){
-        sum += categories[i].amount
+      for(let i = 0; i < newResult.length; i++){
+        sum += newResult[i].amount
       }
-
+      
       let userBudget = budget.amount
       let budgetRemaining = userBudget - sum
       budgetUpdate = `You weekly budget is $${userBudget}. You have $${budgetRemaining} remaining.`
