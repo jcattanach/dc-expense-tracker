@@ -6,6 +6,7 @@ const functions = require('./functions')
 const app = express()
 const session = require('express-session')
 const bcrypt = require('bcrypt')
+const saltRounds = 10
 
 categories = ["Food","Education","Housing","Transportation","Entertainment","Personal Expenses","Bills","Other"]
 
@@ -39,6 +40,7 @@ app.post('/login', function(req,res){
             if(result == true){
                 console.log('login succesful')
                 req.session.userid = userInfo.id
+                req.session.username = userInfo.username
                 res.redirect('/user-index')
             }else{
                 res.render('login',{message : 'You username or password is incorrect'})
@@ -57,7 +59,10 @@ app.post('/register', function(req,res){
     let confirmPassword = req.body.confirmPassword
     let email = req.body.registerEmail
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0feb9e6d64317a3aa00f7e7b46419c3153f134f8
     if(password == confirmPassword){
         functions.user.addNewUser(username, password, email)
         .then(function(userid){
@@ -84,7 +89,7 @@ app.get('/user-index',function(req,res){
         res.redirect('/')
     }else {
         functions.transaction.getAllUserTransactions(userid).then(function(transactions){
-            res.render('index',{transactions: transactions})
+            res.render('index',{transactions: transactions, username:req.session.username})
         })
     }
 })
@@ -104,9 +109,9 @@ app.post('/filter-transactions',function(req,res){
           weekFilter(category, userid)
     })
     .catch(function(error){
-  
+
     })}
-  
+
   function weekFilter(category, userid){
     functions.transaction.filterByTimeAndCategory(userid, category, 'week')
     .then(function(newResult){
@@ -128,7 +133,7 @@ app.post('/filter-transactions',function(req,res){
       for(let i = 0; i < newResult.length; i++){
         sum += newResult[i].amount
       }
-      
+
       let userBudget = budget.amount
       let budgetRemaining = userBudget - sum
       budgetUpdate = `You weekly budget is $${userBudget}. You have $${budgetRemaining} remaining.`
@@ -153,16 +158,32 @@ app.post('/filter-transactions',function(req,res){
 })
 
 app.get('/user-settings',function(req,res){
-  res.render('settings')
+    functions.user.getUserById(req.session.userid)
+    .then(function(user){
+        res.render('account-info', {user: user})
+    })
 })
 
-app.post('/budget',function(req,res){
-  let category = req.body.category
-  let amount = req.body.amount
+app.get('/user-budgets',function(req,res){
+    functions.budget.getAllUserBudgets(req.session.userid)
+    .then(function(budgets){
+        console.log(budgets)
+        res.render('budgets', {budgets: budgets})
+    })
+    .catch(function(error){
+        console.log(error)
+    })
+})
 
-  functions.budget.addNewUserBudget(req.session.userid, category, amount)
+app.post('/update-budget',function(req,res){
+  let category = req.body.category
+  let userid = req.session.userid
+  let amount = req.body.amount
+  console.log(amount)
+
+  functions.budget.updateBudget(userid, category, amount)
   .then(function(){
-      res.redirect('/user-index')
+      res.redirect('user-budgets')
   })
   .catch(function(error){
       console.log(error)
@@ -194,8 +215,8 @@ app.post('/delete-transaction', function(req, res){
     .catch(function(error){
         console.log(error)
     })
-  
-  
+
+
 })
 
 app.post('/update-transaction', function(req, res){
@@ -214,8 +235,42 @@ app.get('/logout', (req,res) =>{
     res.redirect('/')
   })
 
+app.get('/delete-account', function(req,res){
+  res.render('account-info')
+})
+
+app.post('/update-password', function(req,res){
+  let newPassword = req.body.newPassword
+  let confirmPassword = req.body.confirmPassword
+  let oldPassword = req.body.oldPassword
+
+  if(newPassword == confirmPassword){
+  functions.user.getUserById(req.session.userid)
+  .then(function(userInfo){
+    let dbPassword = userInfo.password
+    bcrypt.compare(oldPassword, dbPassword, function(err, result) {
+        if(result == true){
+            res.render('update-password',{message : 'Password updated'})
+            bcrypt.genSalt(saltRounds, function(err, salt){
+                bcrypt.hash(newPassword, salt, function(err, hash){
+                functions.user.updateUserPassword(req.session.userid, hash)
+              })
+            })
+
+        }else{
+            res.render('update-password',{message : 'Old password is incorrect'})
+        }
+    })
+  })} else {
+    let message = 'Your new passwords do not match'
+    res.render('update-password',{ message:message})
+  }
+})
+
+app.get('/update-password', function(req,res){
+  res.render('update-password')
+})
+
 app.listen(3000,function(){
     console.log('Server is running')
 })
-
-

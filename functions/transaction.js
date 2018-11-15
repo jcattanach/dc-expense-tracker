@@ -92,7 +92,7 @@ module.exports = {
         })
     },
     // updates transaction with input values
-    updatTransaction: function(transactionid, name, amount, category, description){
+    updateTransaction: function(transactionid, name, amount, category, description){
         return new Promise(function(resolve, reject){
             models.transaction.findOne({
                 where: {

@@ -32,7 +32,7 @@ module.exports = {
             })
         })
     },
-    // returns one user object 
+    // returns one user object
     // input: username
     getUserByUsername: function(username){
         return new Promise(function(resolve, reject){
@@ -101,5 +101,71 @@ module.exports = {
                 reject(error)
             })
         })
-    }
+    },
+    updateUser: function(userid, password = null, email = null){
+        if (password == null)
+        {
+            password = models.user.findOne({
+                where: {
+                    id: userid
+                }
+            }).get({plain: true})
+        }
+        if (email == null){
+            email = models.user.findOne({
+                where: {
+                    id: userid
+                }
+            }).get({plain: true})
+        }
+        return new Promise(function(resolve, reject){
+            models.user.update({
+                password: password,
+                email: email
+            },
+            {
+                where: {
+                    id: userid
+                }
+            })
+            .then(function(user){
+                if(password != null){
+                    user.updateAttributes({
+                        password: password
+                    })
+                }
+                if(email != null){
+                    user.updateAttributes({
+                        email: email
+                    })
+                }
+            })
+            .then(function(){
+                resolve()
+            })
+            .catch(function(error){
+                resject(error)
+            })
+        })
+    },
+    updateUserPassword: function(userid, password){
+        return new Promise(function(resolve, reject){
+            models.user.update({
+                password: password
+              },
+              {
+                  where :
+                  {
+                      id:userid
+                  }
+              }
+            )
+            .then(function(){
+                resolve()
+            })
+            .catch(function(error){
+                resject(error)
+            })
+        })
+    },
 }
