@@ -6,7 +6,7 @@ module.exports = {
     // input: userid
     getAllUserBudgets : function(userid){
         return new Promise(function(resolve, reject){
-            models.Budget.findAll({
+            models.budget.findAll({
                 where: {
                     userid: userid
                 }
@@ -23,7 +23,7 @@ module.exports = {
     // input: userid, category
     getUserBudgetByCategory: function(userid, category){
         return new Promise(function(resolve, reject){
-            models.Budget.findOne({
+            models.budget.findOne({
                 where: {
                     userid: userid,
                     category: category
@@ -70,5 +70,27 @@ module.exports = {
                 reject(error)
             })
         })
+    },
+    // updates budget amount
+    // input: 
+    updateBudget: function(userid, category, amount){
+        return new Promise(function(resolve, reject){
+            models.budget.findOne({
+                where:{
+                    userid: userid,
+                    category: category
+                }
+            })
+            .then(function(budget){
+                transaction.updateAttributes({
+                    amount: amount
+                })
+            }).then(function(){
+                resolve()
+            })
+            .catch(function(error){
+                reject(error)
+            })
+        }) 
     }
 }

@@ -2,6 +2,7 @@
     <head>
         <link href="/style.css" type="text/css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Baloo+Paaji|Poor+Story|Reenie+Beanie|Work+Sans:300,500,700" rel="stylesheet">
+        <link rel="stylesheet" href="/popupS.min.css">
     </head>
     <body>
         <div id="top-bar">
@@ -18,7 +19,7 @@
                 <input type="text" name="name" placeholder="Enter Transaction Name"/>
                 <input type="text" name="amount" placeholder="Enter Amount"/>
                 <div class="custom-select" style="width:200px;">
-                    <select name="category">
+                    <select id="cat" name="category">
                         <option value="0">Select Category:</option>
                         <option value="Food">Food</option>
                         <option value="Education">Education</option>
@@ -30,7 +31,7 @@
                         <option value="Other">Other</option>
                     </select>
                 </div>
-                <input type = "submit" value = "Add Transaction" />
+                <input type = "submit" value = "Add Transaction" onclick="evalForm(event)" />
             </form>
         </div>
         <div>
@@ -76,4 +77,6 @@
             {{/transactions}}
         </div>
     </body>
+    <script src="/client.js"></script>
+    <script src="/popupS.min.js"></script>
 </html>

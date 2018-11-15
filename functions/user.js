@@ -101,5 +101,32 @@ module.exports = {
                 reject(error)
             })
         })
+    },
+    updateUser: function(userid, password = null, email = null){
+        return new Promise(function(resolve, reject){
+            models.user.fineOne({
+                where: {
+                    id: userid
+                }
+            })
+            .then(function(user){
+                if(password != null){
+                    user.updateAttributes({
+                        password: password
+                    })
+                }
+                if(email != null){
+                    user.updateAttributes({
+                        email: email
+                    })
+                }
+            })
+            .then(function(){
+                resolve()
+            })
+            .catch(function(error){
+                resject(error)
+            })
+        })
     }
 }
