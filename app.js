@@ -124,31 +124,36 @@ app.post('/filter-transactions',function(req,res){
 
       let budgetUpdate = ''
 
-      if(categories && budget){
+      if(categories != null && budget != null){
         let sum = 0
-      for(let i = 0; i < newResult.length; i++){
-        sum += newResult[i].amount
-      }
+        for(let i = 0; i < newResult.length; i++){
+          sum += newResult[i].amount
+        }
 
-      let userBudget = budget.amount
-      let budgetRemaining = userBudget - sum
-      budgetUpdate = `You weekly budget is $${userBudget}. You have $${budgetRemaining} remaining.`
-      let message = ''
-      if(budgetRemaining <= 25 && budgetRemaining > 0){
-        let message = 'You have $25 or less remaining in your budget for this category'
-        res.render('index',{message:message, budgetUpdate:budgetUpdate, transactions:categories})
-      } else if( budgetRemaining == 0){
-        let message = 'You have $0 remaining in your budget for this category'
-        res.render('index',{message:message, budgetUpdate:budgetUpdate, transactions:categories})
-      } else if( budgetRemaining < 0){
-        let message = 'You are over your limit for this category'
-        res.render('index',{message:message, budgetUpdate:budgetUpdate, transactions:categories})
-      } else {
-        res.render('index',{budgetUpdate:budgetUpdate, transactions:categories})
-      }
-    } else if (budget == null){
-      res.render('index', {transactions:categories})
-    }
+        let userBudget = budget.amount
+        let budgetRemaining = userBudget - sum
+        budgetUpdate = `Your weekly budget is $${userBudget}. You have $${budgetRemaining} remaining.`
+        let overBudget = Math.abs(budgetRemaining)
+        overBudgetUpdate = `Your weekly budget is $${userBudget}. You are over budget by $${overBudget}.`
+        let message = ''
+
+        if(budgetRemaining <= 25 && budgetRemaining > 0){
+          let message = 'You have $25 or less remaining in your budget for this category'
+          res.render('index',{message:message, budgetUpdate:budgetUpdate, transactions:categories})
+        } else if( budgetRemaining == 0){
+          let message = 'You have $0 remaining in your budget for this category'
+          res.render('index',{message:message, budgetUpdate:budgetUpdate, transactions:categories})
+        } else if( budgetRemaining < 0){
+          let message = 'You are over your limit for this category'
+          res.render('index',{message:message, budgetUpdate:overBudgetUpdate, transactions:categories})
+        } else if(budgetRemaining > 25) {
+          res.render('index',{budgetUpdate:budgetUpdate, transactions:categories})
+        }
+     } else {
+       res.render('index', {transactions:categories, budgetUpdate:"test", message:"test "})
+     }
+
+
     })
   }
 })
