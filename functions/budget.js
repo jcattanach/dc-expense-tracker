@@ -69,5 +69,25 @@ module.exports = {
                 reject(error)
             })
         })
+    },
+    updateBudget: function(userid, category, amount){
+        return new Promise(function(resolve, reject){
+            models.budget.findOne({
+                where:{
+                    userid: userid,
+                    category: category
+                }
+            })
+            .then(function(budget){
+                transaction.updateAttributes({
+                    amount: amount
+                })
+            }).then(function(){
+                resolve()
+            })
+            .catch(function(error){
+                reject(error)
+            })
+        }) 
     }
 }
