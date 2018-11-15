@@ -31,7 +31,7 @@ app.post('/login', function(req,res){
   .then(function(userInfo){
     if(userInfo == null){
       res.render('login',{message : 'You username or password is incorrect'})
-    } 
+    }
     else {
         bcrypt.compare(password, userInfo.password, function(err, result) {
             if(result == true){
@@ -84,11 +84,49 @@ app.post('/filter-transactions',function(req,res){
   let timeFilter = req.body.timeFilter
   functions.transaction.filterByTimeAndCategory(userid, category, timeFilter)
   .then(function(results){
-        res.render('index', {transactions: results})
+        categories = results
+        console.log(categories)
+        getOneBudget(categories)
   })
   .catch(function(error){
 
   })
+  function getOneBudget(categories){
+
+
+    models.budget.findOne({
+      where:{
+          category: category,
+          userid: req.session.userid
+      }
+    }).then(function(budget){
+
+      if(categories && budget){
+        let sum = 0
+      for(let i = 0; i < categories.length; i++){
+        sum += categories[i].amount
+      }
+
+      let userBudget = budget.amount
+      let budgetRemaining = userBudget - sum
+      let message = ''
+      if(budgetRemaining <= 25 && budgetRemaining > 0){
+        let message = 'You have $25 or less remaining in your budget for this category'
+        res.render('index',{message:message, budgetRemaining:budgetRemaining, budget:budget.amount, transactions:categories})
+      } else if( budgetRemaining == 0){
+        let message = 'You have $0 remaining in your budget for this category'
+        res.render('index',{message:message, budgetRemaining:budgetRemaining, budget:budget.amount, transactions:categories})
+      } else if( budgetRemaining < 0){
+        let message = 'You are over your limit for this category'
+        res.render('index',{message:message, budgetRemaining:budgetRemaining, budget:budget.amount, transactions:categories})
+      } else {
+        res.render('index',{budgetRemaining:budgetRemaining, budget:budget.amount, transactions:categories})
+      }
+    } else if (budget == null){
+      res.render('index', {transactions:categories})
+    }
+    })
+  }
 })
 
 app.get('/user-settings',function(req,res){
@@ -101,7 +139,7 @@ app.post('/budget',function(req,res){
 
   functions.budget.addNewUserBudget(req.session.userid, category, amount)
   .then(function(){
-      res.redirect('/index')
+      res.redirect('/user-index')
   })
   .catch(function(error){
       console.log(error)
