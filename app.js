@@ -7,6 +7,8 @@ const app = express()
 const session = require('express-session')
 const bcrypt = require('bcrypt')
 
+categories = ["Food","Education","Housing","Transportation","Entertainment","Personal Expenses","Bills","Other"]
+
 app.use(session({
   secret: '1a2s3d',
   resave: false,
@@ -55,10 +57,20 @@ app.post('/register', function(req,res){
     let confirmPassword = req.body.confirmPassword
     let email = req.body.registerEmail
 
-    if(registerPassword == confirmPassword){
+
+    if(password == confirmPassword){
         functions.user.addNewUser(username, password, email)
+        .then(function(userid){
+          categories.forEach(function(category){
+            console.log(category)
+            functions.budget.addNewUserBudget(userid,category,null)
+          })
+        })
         .then(function(){
             res.redirect('/')
+          })
+        .catch(function(error){
+            console.log(error)
         })
     }
     else{
