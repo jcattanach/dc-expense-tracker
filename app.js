@@ -220,8 +220,14 @@ app.get('/logout', (req,res) =>{
     res.redirect('/')
   })
 
+app.post('/delete-account', function(req,res){
+  let userid = req.session.userid
+  functions.user.deleteUserByUserID(userid)
+  res.redirect('/logout')
+})
+
 app.get('/delete-account', function(req,res){
-  res.render('account-info')
+  res.render('delete-account')
 })
 
 app.post('/update-password', function(req,res){
