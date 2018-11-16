@@ -95,17 +95,17 @@ app.post('/filter-transactions',function(req,res){
   let userid = req.session.userid
   let category = req.body.category
   let timeFilter = req.body.timeFilter
+  let categories = null
 
   if (category== "All"){
     res.redirect('/user-index')
   }else{functions.transaction.filterByTimeAndCategory(userid, category, timeFilter)
     .then(function(results){
           categories = results
-          // getOneBudget(categories)
           weekFilter(category, userid)
     })
     .catch(function(error){
-
+        console.log(error)
     })}
 
   function weekFilter(category, userid){
