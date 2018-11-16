@@ -90,7 +90,7 @@ app.post('/register', function(req,res){
         }
         else {
             res.render('register',{message: errorMessage})
-        }  
+        }
     })
     .catch(function(error){
         console.log(error)
@@ -220,7 +220,7 @@ app.post('/new-budget', function(req, res){
 
 
 
-    
+
 })
 
 app.post('/update-budget',function(req,res){
@@ -296,8 +296,13 @@ app.get('/logout', (req,res) =>{
 
 app.post('/delete-account', function(req,res){
   let userid = req.session.userid
-  functions.user.deleteUserByUserID(userid)
-  res.redirect('/logout')
+  functions.transaction.deleteTransactionByUserID(userid).then(function(){
+    functions.budget.deleteBudgetByUserID(userid)
+  }).then(function(){
+    functions.user.deleteUserByUserID(userid)
+  }).then(function(){
+    res.redirect('/logout')
+  })
 })
 
 app.get('/delete-account', function(req,res){
