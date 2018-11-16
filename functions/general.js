@@ -19,7 +19,7 @@ module.exports = {
     getStartDate: function(timeFilter){
         let today = new Date()
         let date = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0)
-        
+
         if (timeFilter == "all"){
             date.setDate(1)
             date.setMonth(0)

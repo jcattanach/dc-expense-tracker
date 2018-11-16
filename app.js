@@ -88,7 +88,7 @@ app.post('/register', function(req,res){
         }
         else {
             res.render('register',{message: errorMessage})
-        }  
+        }
     })
     .catch(function(error){
         console.log(error)
@@ -134,7 +134,6 @@ app.post('/filter-transactions',function(req,res){
             for(let i = 0; i < newResult.length; i++){
             sum += newResult[i].amount
             }
-
             let userBudget = budget.amount
             let budgetRemaining = userBudget - sum
             budgetUpdate = `Your weekly budget is $${userBudget}. You have $${budgetRemaining} remaining.`
@@ -144,22 +143,22 @@ app.post('/filter-transactions',function(req,res){
 
             if(budgetRemaining <= 25 && budgetRemaining > 0){
                 message = 'You have $25 or less remaining in your budget for this category'
-                res.render('index',{message:message, budgetUpdate:budgetUpdate, transactions:categories})
+                res.render('index',{message:message, budgetUpdate:budgetUpdate, transactions:categories, username:req.session.username})
             } else if( budgetRemaining == 0){
                 message = 'You have $0 remaining in your budget for this category'
-                res.render('index',{message:message, budgetUpdate:budgetUpdate, transactions:categories})
+                res.render('index',{message:message, budgetUpdate:budgetUpdate, transactions:categories, username:req.session.username})
             } else if( budgetRemaining < 0){
                 message = 'You are over your limit for this category'
-                res.render('index',{message:message, budgetUpdate:overBudgetUpdate, transactions:categories})
+                res.render('index',{message:message, budgetUpdate:overBudgetUpdate, transactions:categories, username:req.session.username})
             } else if(budgetRemaining > 25) {
-                res.render('index',{budgetUpdate:budgetUpdate, transactions:categories})
+                res.render('index',{budgetUpdate:budgetUpdate, transactions:categories, username:req.session.username})
             }
         }
         else if(categories != null){
-        res.render('index', {transactions:categories})
+            res.render('index', {transactions:categories, username:req.session.username})
         }
         else {
-            res.render('index', {budgetUpdate: "No transactions to display"})
+            res.render('index', {budgetUpdate: "No transactions to display",username:req.session.username})
         }
     })
   }
@@ -168,7 +167,7 @@ app.post('/filter-transactions',function(req,res){
 app.get('/user-settings',function(req,res){
     functions.user.getUserById(req.session.userid)
     .then(function(user){
-        res.render('account-info', {user: user})
+        res.render('account-info', {user: user, username:req.session.username})
     })
     .catch(function(error){
         console.log(error)
@@ -179,7 +178,7 @@ app.get('/user-budgets',function(req,res){
     functions.budget.getAllUserBudgets(req.session.userid)
     .then(function(budgets){
         console.log(budgets)
-        res.render('budgets', {budgets: budgets})
+        res.render('budgets', {budgets: budgets, username:req.session.username})
     })
     .catch(function(error){
         console.log(error)
@@ -204,7 +203,7 @@ app.post('/new-budget', function(req, res){
     .then(function(){
         functions.budget.getAllUserBudgets(req.session.userid)
         .then(function(budgets){
-            res.render('budgets', {message: budgetMessage, budgets: budgets})
+            res.render('budgets', {message: budgetMessage, budgets: budgets, username:req.session.username})
         })
         .catch(function(error){
             console.log(error)
@@ -288,12 +287,19 @@ app.get('/logout', (req,res) =>{
 
 app.post('/delete-account', function(req,res){
   let userid = req.session.userid
-  functions.user.deleteUserByUserID(userid)
-  res.redirect('/logout')
+  functions.transaction.deleteTransactionByUserID(userid).then(function(){
+    functions.budget.deleteBudgetByUserID(userid)
+  }).then(function(){
+    functions.user.deleteUserByUserID(userid)
+  }).then(function(){
+    req.session.destroy(function(err){
+    res.redirect('/logout')
+    })
+  })
 })
 
 app.get('/delete-account', function(req,res){
-  res.render('delete-account')
+  res.render('delete-account', {username:req.session.username})
 })
 
 app.post('/update-password', function(req,res){
@@ -307,7 +313,7 @@ app.post('/update-password', function(req,res){
     let dbPassword = userInfo.password
     bcrypt.compare(oldPassword, dbPassword, function(err, result) {
         if(result == true){
-            res.render('update-password',{message : 'Password updated'})
+            res.render('update-password',{message : 'Password updated', username:req.session.username})
             bcrypt.genSalt(saltRounds, function(err, salt){
                 bcrypt.hash(newPassword, salt, function(err, hash){
                 functions.user.updateUserPassword(req.session.userid, hash)
@@ -315,17 +321,17 @@ app.post('/update-password', function(req,res){
             })
 
         }else{
-            res.render('update-password',{message : 'Old password is incorrect'})
+            res.render('update-password',{message : 'Old password is incorrect', username:req.session.username})
         }
     })
   })} else {
     let message = 'Your new passwords do not match'
-    res.render('update-password',{ message:message})
+    res.render('update-password',{ message:message, username:req.session.username})
   }
 })
 
 app.get('/update-password', function(req,res){
-  res.render('update-password')
+  res.render('update-password', {username:req.session.username})
 })
 
 app.listen(3000,function(){

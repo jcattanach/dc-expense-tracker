@@ -114,6 +114,23 @@ module.exports = {
             })
         })
     },
+    // removes transactions by userid from transaction table
+    // input: userid
+    deleteTransactionByUserID: function(userid){
+        return new Promise(function(resolve, reject){
+            models.transaction.destroy({
+                where:{
+                    userid: userid
+                },
+                cascade: true
+            }).then(function(){
+                resolve()
+            })
+            .catch(function(error){
+                reject(error)
+            })
+        })
+    },
     // updates transaction with input values
     updateTransaction: function(transactionid, name, amount, category, description){
         return new Promise(function(resolve, reject){
