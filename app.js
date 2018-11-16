@@ -168,11 +168,22 @@ app.post('/update-budget',function(req,res){
 
   functions.budget.updateBudget(userid, category, amount)
   .then(function(){
-      res.redirect('user-budgets')
+      res.redirect('/user-budgets')
   })
   .catch(function(error){
       console.log(error)
   })
+})
+
+app.post('/delete-budget', function(req,res){
+    let id = req.body.budgetid
+    functions.budget.deleteBudgetById(id)
+    .then(function(){
+        res.redirect('/user-budgets')
+    })
+    .catch(function(error){
+        console.log(error)
+    })
 })
 
 app.post('/new-transaction', function(req, res){

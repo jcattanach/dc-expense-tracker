@@ -56,12 +56,11 @@ module.exports = {
     },
     // removes transaction from budget table
     // input: category + userid
-    deleteBudgetByCategory: function(category, userid){
+    deleteBudgetById: function(budgetid){
         return new Promise(function(resolve, reject){
             models.budget.destroy({
                 where:{
-                    category: category,
-                    userid: userid
+                    id: budgetid
                 }
             }).then(function(){
                 resolve()

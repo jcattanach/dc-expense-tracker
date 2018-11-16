@@ -19,22 +19,38 @@
       <li><a href = "/user-settings">Account Details</a></li>
       <li><a href = "/user-budgets">Budgets</a></li>
     </ul>
+    <!--
+      Add budget form here
+
+
+    -->
+
+    <h3>Budgets</h3>
     <table>
     {{#budgets}}
       <tr>
+        <th></th>
         <th>Category</th>
         <th>Amount</th>
+        <th></th>
       </tr>
       <tr>
+        <td>
+          <form action = "/delete-budget" method = "POST">
+            <input type = "hidden" name = "budgetid" value = "{{id}}"/>
+            <input type = "submit" value = "X" />
+          </form>
+        </td>
         <td>
           {{category}}
         </td>
         <td>
-          <div class='budgetForm'>
             <form action='/update-budget' method='POST'>
               <input type = "hidden" name = "budgetid" value = "{{id}}" />
               <input type = "hidden" name = "category" value = "{{category}}" />
               <input type = "text" name="amount" value = "{{amount}}" />
+        </td>
+        <td>
               <input type = "submit" value = "Update Budget" />
             </form>
           </div>
