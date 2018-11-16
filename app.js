@@ -8,6 +8,8 @@ const session = require('express-session')
 const bcrypt = require('bcrypt')
 const saltRounds = 10
 
+categories = ["Food","Education","Housing","Transportation","Entertainment","Personal Expenses","Bills","Other"]
+
 app.use(session({
   secret: '1a2s3d',
   resave: false,
@@ -59,8 +61,17 @@ app.post('/register', function(req,res){
 
     if(password == confirmPassword){
         functions.user.addNewUser(username, password, email)
+        .then(function(userid){
+          categories.forEach(function(category){
+            console.log(category)
+            functions.budget.addNewUserBudget(userid,category,null)
+          })
+        })
         .then(function(){
             res.redirect('/')
+          })
+        .catch(function(error){
+            console.log(error)
         })
     }
     else{
@@ -113,31 +124,36 @@ app.post('/filter-transactions',function(req,res){
 
       let budgetUpdate = ''
 
-      if(categories && budget){
+      if(categories != null && budget != null){
         let sum = 0
-      for(let i = 0; i < newResult.length; i++){
-        sum += newResult[i].amount
-      }
+        for(let i = 0; i < newResult.length; i++){
+          sum += newResult[i].amount
+        }
 
-      let userBudget = budget.amount
-      let budgetRemaining = userBudget - sum
-      budgetUpdate = `You weekly budget is $${userBudget}. You have $${budgetRemaining} remaining.`
-      let message = ''
-      if(budgetRemaining <= 25 && budgetRemaining > 0){
-        let message = 'You have $25 or less remaining in your budget for this category'
-        res.render('index',{message:message, budgetUpdate:budgetUpdate, transactions:categories})
-      } else if( budgetRemaining == 0){
-        let message = 'You have $0 remaining in your budget for this category'
-        res.render('index',{message:message, budgetUpdate:budgetUpdate, transactions:categories})
-      } else if( budgetRemaining < 0){
-        let message = 'You are over your limit for this category'
-        res.render('index',{message:message, budgetUpdate:budgetUpdate, transactions:categories})
-      } else {
-        res.render('index',{budgetUpdate:budgetUpdate, transactions:categories})
-      }
-    } else if (budget == null){
-      res.render('index', {transactions:categories})
-    }
+        let userBudget = budget.amount
+        let budgetRemaining = userBudget - sum
+        budgetUpdate = `Your weekly budget is $${userBudget}. You have $${budgetRemaining} remaining.`
+        let overBudget = Math.abs(budgetRemaining)
+        overBudgetUpdate = `Your weekly budget is $${userBudget}. You are over budget by $${overBudget}.`
+        let message = ''
+
+        if(budgetRemaining <= 25 && budgetRemaining > 0){
+          let message = 'You have $25 or less remaining in your budget for this category'
+          res.render('index',{message:message, budgetUpdate:budgetUpdate, transactions:categories})
+        } else if( budgetRemaining == 0){
+          let message = 'You have $0 remaining in your budget for this category'
+          res.render('index',{message:message, budgetUpdate:budgetUpdate, transactions:categories})
+        } else if( budgetRemaining < 0){
+          let message = 'You are over your limit for this category'
+          res.render('index',{message:message, budgetUpdate:overBudgetUpdate, transactions:categories})
+        } else if(budgetRemaining > 25) {
+          res.render('index',{budgetUpdate:budgetUpdate, transactions:categories})
+        }
+     } else {
+       res.render('index', {transactions:categories, budgetUpdate:"test", message:"test "})
+     }
+
+
     })
   }
 })
@@ -231,8 +247,14 @@ app.get('/logout', (req,res) =>{
     res.redirect('/')
   })
 
+app.post('/delete-account', function(req,res){
+  let userid = req.session.userid
+  functions.user.deleteUserByUserID(userid)
+  res.redirect('/logout')
+})
+
 app.get('/delete-account', function(req,res){
-  res.render('account-info')
+  res.render('delete-account')
 })
 
 app.post('/update-password', function(req,res){
