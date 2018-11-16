@@ -2,6 +2,9 @@ module.exports = {
     // removes metadata from query results
     getJSON : function(results){
         let output = null
+        if(results == null){
+            return null
+        }
         if (results.constructor === Array && results.length != 0){
             output = results.map(function(object){
                 return object.get({plain: true})

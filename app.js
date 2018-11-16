@@ -8,8 +8,6 @@ const session = require('express-session')
 const bcrypt = require('bcrypt')
 const saltRounds = 10
 
-categories = ["Food","Education","Housing","Transportation","Entertainment","Personal Expenses","Bills","Other"]
-
 app.use(session({
   secret: '1a2s3d',
   resave: false,
@@ -109,62 +107,60 @@ app.get('/user-index',function(req,res){
 })
 
 app.post('/filter-transactions',function(req,res){
-  let userid = req.session.userid
-  let category = req.body.category
-  let timeFilter = req.body.timeFilter
-  let categories = null
+    let userid = req.session.userid
+    let category = req.body.category
+    let timeFilter = req.body.timeFilter
+    let categories = null
 
-  if (category== "All"){
-    res.redirect('/user-index')
-  }else{functions.transaction.filterByTimeAndCategory(userid, category, timeFilter)
+    functions.transaction.filterByTimeAndCategory(userid, category, timeFilter)
     .then(function(results){
         categories = results
         weekFilter(category, userid)
     })
     .catch(function(error){
         console.log(error)
-    })}
-  function weekFilter(category, userid){
-    functions.transaction.filterByTimeAndCategory(userid, category, 'week')
-    .then(function(newResult){
-        getOneBudget(categories, newResult)
-    })}
-  function getOneBudget(categories, newResult){
-    functions.budget.getUserBudgetByCategory(userid, category).then(function(budget){
-      let budgetUpdate = ''
+    })
+    function weekFilter(category, userid){
+        functions.transaction.filterByTimeAndCategory(userid, category, 'week')
+        .then(function(newResult){
+            getOneBudget(categories, newResult)
+        })}
+    function getOneBudget(categories, newResult){
+        functions.budget.getUserBudgetByCategory(userid, category).then(function(budget){
+            let budgetUpdate = ''
 
-      if(categories != null && budget != null){
-        let sum = 0
-        for(let i = 0; i < newResult.length; i++){
-          sum += newResult[i].amount
+        if(categories != null && budget != null){
+            let sum = 0
+            for(let i = 0; i < newResult.length; i++){
+            sum += newResult[i].amount
+            }
+
+            let userBudget = budget.amount
+            let budgetRemaining = userBudget - sum
+            budgetUpdate = `Your weekly budget is $${userBudget}. You have $${budgetRemaining} remaining.`
+            let overBudget = Math.abs(budgetRemaining)
+            overBudgetUpdate = `Your weekly budget is $${userBudget}. You are over budget by $${overBudget}.`
+            let message = ''
+
+            if(budgetRemaining <= 25 && budgetRemaining > 0){
+                message = 'You have $25 or less remaining in your budget for this category'
+                res.render('index',{message:message, budgetUpdate:budgetUpdate, transactions:categories})
+            } else if( budgetRemaining == 0){
+                message = 'You have $0 remaining in your budget for this category'
+                res.render('index',{message:message, budgetUpdate:budgetUpdate, transactions:categories})
+            } else if( budgetRemaining < 0){
+                message = 'You are over your limit for this category'
+                res.render('index',{message:message, budgetUpdate:overBudgetUpdate, transactions:categories})
+            } else if(budgetRemaining > 25) {
+                res.render('index',{budgetUpdate:budgetUpdate, transactions:categories})
+            }
         }
-
-        let userBudget = budget.amount
-        let budgetRemaining = userBudget - sum
-        budgetUpdate = `Your weekly budget is $${userBudget}. You have $${budgetRemaining} remaining.`
-        let overBudget = Math.abs(budgetRemaining)
-        overBudgetUpdate = `Your weekly budget is $${userBudget}. You are over budget by $${overBudget}.`
-        let message = ''
-
-        if(budgetRemaining <= 25 && budgetRemaining > 0){
-          message = 'You have $25 or less remaining in your budget for this category'
-          res.render('index',{message:message, budgetUpdate:budgetUpdate, transactions:categories})
-        } else if( budgetRemaining == 0){
-          message = 'You have $0 remaining in your budget for this category'
-          res.render('index',{message:message, budgetUpdate:budgetUpdate, transactions:categories})
-        } else if( budgetRemaining < 0){
-          message = 'You are over your limit for this category'
-          res.render('index',{message:message, budgetUpdate:overBudgetUpdate, transactions:categories})
-        } else if(budgetRemaining > 25) {
-          res.render('index',{budgetUpdate:budgetUpdate, transactions:categories})
+        else if(categories != null){
+        res.render('index', {transactions:categories})
         }
-     }
-     else if(categories != null){
-       res.render('index', {transactions:categories})
-     }
-     else {
-         res.render('index', {budgetUpdate: "No transactions to display"})
-     }
+        else {
+            res.render('index', {budgetUpdate: "No transactions to display"})
+        }
     })
   }
 })
@@ -217,10 +213,6 @@ app.post('/new-budget', function(req, res){
     .catch(function(error){
         console.log(error)
     })
-
-
-
-    
 })
 
 app.post('/update-budget',function(req,res){
@@ -338,21 +330,4 @@ app.get('/update-password', function(req,res){
 
 app.listen(3000,function(){
     console.log('Server is running')
-})
-
-let newDate = new Date(2018, 11, 13)
-
-models.transaction.update({
-    createdAt: newDate
-},
-{
-    where: {
-        id: 105
-    }
-})
-.then(function(){
-    console.log("updated date")
-})
-.catch(function(error){
-    console.log(error)
 })
