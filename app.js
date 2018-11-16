@@ -176,6 +176,18 @@ app.get('/user-budgets',function(req,res){
     })
 })
 
+app.post('/new-budget', function(req, res){
+    let category = req.body.category
+    let amount = req.body.amount
+    functions.budget.addNewUserBudget(req.session.userid, category, amount)
+    .then(function(){
+        res.redirect('/user-budgets')
+    })
+    .catch(function(error){
+        console.log(error)
+    })
+})
+
 app.post('/update-budget',function(req,res){
   let category = req.body.category
   let userid = req.session.userid
