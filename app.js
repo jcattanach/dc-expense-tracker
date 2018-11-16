@@ -2,10 +2,13 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const mustacheExpress = require('mustache-express')
 const models = require('./models')
+const functions = require('./functions')
 const app = express()
 const session = require('express-session')
 const bcrypt = require('bcrypt')
 const saltRounds = 10
+
+categories = ["Food","Education","Housing","Transportation","Entertainment","Personal Expenses","Bills","Other"]
 
 app.use(session({
   secret: '1a2s3d',
@@ -13,139 +16,346 @@ app.use(session({
   saveUninitialized: true
 }))
 
-
-
 app.use(bodyParser.urlencoded({extended:false}))
 app.use(express.static('public'))
 app.engine('mustache', mustacheExpress())
 app.set("views", "./views")
 app.set("view engine", "mustache")
 
+app.get('/',function(req,res){
+    res.render('login')
+  })
 
 app.post('/login', function(req,res){
-  let loginUsername = req.body.loginUsername
-  let loginPassword = req.body.loginPassword
+  let username = req.body.loginUsername
+  let password = req.body.loginPassword
 
-  models.user.findOne({
-    where : {
-       username: loginUsername
+  functions.user.getUserByUsername(username)
+  .then(function(userInfo){
+    if(userInfo == null){
+      res.render('login',{message : 'You username or password is incorrect'})
     }
-  }).then(function(userInfo){
-    bcrypt.compare(loginPassword, userInfo.password, function(err, result) {
-    if(result == true){
-      console.log('login succesful')
-      req.session.userid = userInfo.id
-      res.redirect('/index')
-    }else{
-      res.redirect('/')
-    }
-  })
- })
-})
-
-app.post('/register', function(req,res){
-  let registerUsername = req.body.registerUsername
-  let registerPassword = req.body.registerPassword
-  let confirmPassword = req.body.confirmPassword
-  let registerEmail = req.body.registerEmail
-  let monthly_income = req.body.monthly_income
-
-
-  if(registerPassword == confirmPassword){
-
-    bcrypt.genSalt(saltRounds, function(err, salt) {
-      bcrypt.hash(registerPassword, salt, function(err, hash) {
-          // Store hash in your password DB.
-  let userInfo = models.user.build({
-    username: registerUsername,
-    password: hash,
-    email: registerEmail,
-    monthly_income: monthly_income
-  })
-  userInfo.save().then(function(){
-    res.redirect('/')
-  })
-
-});
-});
-
-}else{
-  res.redirect('/register')
-}
-
+    else {
+        bcrypt.compare(password, userInfo.password, function(err, result) {
+            if(result == true){
+                console.log('login succesful')
+                req.session.userid = userInfo.id
+                req.session.username = userInfo.username
+                res.redirect('/user-index')
+            }else{
+                res.render('login',{message : 'You username or password is incorrect'})
+            }
+        })
+    }})
 })
 
 app.get('/register',function(req,res){
     res.render('register')
 })
 
+app.post('/register', function(req,res){
+    let username = req.body.registerUsername
+    let password = req.body.registerPassword
+    let confirmPassword = req.body.confirmPassword
+    let email = req.body.registerEmail
+    let errorMessage = null
+    let allowRegister = false
+
+    functions.user.usernameEmailTaken(username, email)
+    .then(function(results){
+        if(!results.usernameTaken && !results.emailTaken){
+            if(password == confirmPassword){
+                allowRegister = true
+            }
+            else{
+                errorMessage = "Passwords don't match."
+            }
+        }
+        else if(results.usernameTaken && !results.emailTaken){
+            errorMessage = 'Username already in use.'
+        }
+        else if(results.emailTaken && !results.emailTaken){
+            errorMessage = 'Email already in use.'
+        }
+        else {
+            errorMessage = "Username and email already in use"
+        }
+    })
+    .then(function(){
+        if(allowRegister){
+            functions.user.addNewUser(username, password, email)
+            .then(function(){
+                res.redirect('/')
+            })
+        }
+        else {
+            res.render('register',{message: errorMessage})
+        }
+    })
+    .catch(function(error){
+        console.log(error)
+    })
+})
+
+app.get('/user-index',function(req,res){
+    let userid = req.session.userid
+    if( userid == null){
+        res.redirect('/')
+    }else {
+        functions.transaction.getAllUserTransactions(userid).then(function(transactions){
+            res.render('index',{transactions: transactions, username:req.session.username})
+        })
+    }
+})
+
+app.post('/filter-transactions',function(req,res){
+  let userid = req.session.userid
+  let category = req.body.category
+  let timeFilter = req.body.timeFilter
+  let categories = null
+
+  if (category== "All"){
+    res.redirect('/user-index')
+  }else{functions.transaction.filterByTimeAndCategory(userid, category, timeFilter)
+    .then(function(results){
+        categories = results
+        weekFilter(category, userid)
+    })
+    .catch(function(error){
+        console.log(error)
+    })}
+  function weekFilter(category, userid){
+    functions.transaction.filterByTimeAndCategory(userid, category, 'week')
+    .then(function(newResult){
+        getOneBudget(categories, newResult)
+    })}
+  function getOneBudget(categories, newResult){
+    functions.budget.getUserBudgetByCategory(userid, category).then(function(budget){
+      let budgetUpdate = ''
+
+      if(categories != null && budget != null){
+        let sum = 0
+        for(let i = 0; i < newResult.length; i++){
+          sum += newResult[i].amount
+        }
+
+        let userBudget = budget.amount
+        let budgetRemaining = userBudget - sum
+        budgetUpdate = `Your weekly budget is $${userBudget}. You have $${budgetRemaining} remaining.`
+        let overBudget = Math.abs(budgetRemaining)
+        overBudgetUpdate = `Your weekly budget is $${userBudget}. You are over budget by $${overBudget}.`
+        let message = ''
+
+        if(budgetRemaining <= 25 && budgetRemaining > 0){
+          message = 'You have $25 or less remaining in your budget for this category'
+          res.render('index',{message:message, budgetUpdate:budgetUpdate, transactions:categories, username:req.session.username})
+        } else if( budgetRemaining == 0){
+          message = 'You have $0 remaining in your budget for this category'
+          res.render('index',{message:message, budgetUpdate:budgetUpdate, transactions:categories, username:req.session.username})
+        } else if( budgetRemaining < 0){
+          message = 'You are over your limit for this category'
+          res.render('index',{message:message, budgetUpdate:overBudgetUpdate, transactions:categories, username:req.session.username})
+        } else if(budgetRemaining > 25) {
+          res.render('index',{budgetUpdate:budgetUpdate, transactions:categories, username:req.session.username})
+        }
+     }
+     else if(categories != null){
+       res.render('index', {transactions:categories, username:req.session.username})
+     }
+     else {
+         res.render('index', {budgetUpdate: "No transactions to display",username:req.session.username})
+     }
+    })
+  }
+})
+
+app.get('/user-settings',function(req,res){
+    functions.user.getUserById(req.session.userid)
+    .then(function(user){
+        res.render('account-info', {user: user, username:req.session.username})
+    })
+    .catch(function(error){
+        console.log(error)
+    })
+})
+
+app.get('/user-budgets',function(req,res){
+    functions.budget.getAllUserBudgets(req.session.userid)
+    .then(function(budgets){
+        console.log(budgets)
+        res.render('budgets', {budgets: budgets, username:req.session.username})
+    })
+    .catch(function(error){
+        console.log(error)
+    })
+})
+
+app.post('/new-budget', function(req, res){
+    let userid = req.session.userid
+    let category = req.body.category
+    let amount = req.body.amount
+    let budgetMessage = null
+
+    functions.budget.budgetExists(userid, category)
+    .then(function(exists){
+        if(exists){
+            budgetMessage = "A budget for this category already exists."
+        }
+        else {
+            return functions.budget.addNewUserBudget(userid, category, amount)
+        }
+    })
+    .then(function(){
+        functions.budget.getAllUserBudgets(req.session.userid)
+        .then(function(budgets){
+            res.render('budgets', {message: budgetMessage, budgets: budgets, username:req.session.username})
+        })
+        .catch(function(error){
+            console.log(error)
+        })
+    })
+    .catch(function(error){
+        console.log(error)
+    })
+})
+
+app.post('/update-budget',function(req,res){
+  let category = req.body.category
+  let userid = req.session.userid
+  let amount = req.body.amount
+  console.log(amount)
+
+  functions.budget.updateBudget(userid, category, amount)
+  .then(function(){
+      res.redirect('/user-budgets')
+  })
+  .catch(function(error){
+      console.log(error)
+  })
+})
+
+app.post('/delete-budget', function(req,res){
+    let id = req.body.budgetid
+    functions.budget.deleteBudgetById(id)
+    .then(function(){
+        res.redirect('/user-budgets')
+    })
+    .catch(function(error){
+        console.log(error)
+    })
+})
+
+app.post('/new-transaction', function(req, res){
+    let userid = req.session.userid
+    let name = req.body.name
+    let amount = req.body.amount
+    let category = req.body.category
+    let description = req.body.description
+
+    functions.transaction.addNewTransaction(userid, name, amount, category, description)
+    .then(function(){
+        res.redirect('/user-index')
+    })
+    .catch(function(error){
+        console.log(error)
+    })
+})
+
+app.post('/delete-transaction', function(req, res){
+    let transactionid = req.body.id
+    functions.transaction.deleteTransaction(transactionid)
+    .then(function(){
+        res.redirect('/user-index')
+    })
+    .catch(function(error){
+        console.log(error)
+    })
+
+
+})
+
+app.post('/update-transaction', function(req, res){
+    // functions.transaction.getByTransactionId(req.body.id)
+    // .then(function(transaction){
+    //     transaction.updateAttributes{
+
+    //     }
+    // })
+    console.log("work in progress")
+})
+
+app.get('/logout', (req,res) =>{
+    req.session.destroy(function(err){
+    })
+    res.redirect('/')
+  })
+
+app.post('/delete-account', function(req,res){
+  let userid = req.session.userid
+  functions.transaction.deleteTransactionByUserID(userid).then(function(){
+    functions.budget.deleteBudgetByUserID(userid)
+  }).then(function(){
+    functions.user.deleteUserByUserID(userid)
+  }).then(function(){
+    req.session.destroy(function(err){
+    res.redirect('/logout')
+    })
+  })
+})
+
+app.get('/delete-account', function(req,res){
+  res.render('delete-account', {username:req.session.username})
+})
+
+app.post('/update-password', function(req,res){
+  let newPassword = req.body.newPassword
+  let confirmPassword = req.body.confirmPassword
+  let oldPassword = req.body.oldPassword
+
+  if(newPassword == confirmPassword){
+  functions.user.getUserById(req.session.userid)
+  .then(function(userInfo){
+    let dbPassword = userInfo.password
+    bcrypt.compare(oldPassword, dbPassword, function(err, result) {
+        if(result == true){
+            res.render('update-password',{message : 'Password updated', username:req.session.username})
+            bcrypt.genSalt(saltRounds, function(err, salt){
+                bcrypt.hash(newPassword, salt, function(err, hash){
+                functions.user.updateUserPassword(req.session.userid, hash)
+              })
+            })
+
+        }else{
+            res.render('update-password',{message : 'Old password is incorrect', username:req.session.username})
+        }
+    })
+  })} else {
+    let message = 'Your new passwords do not match'
+    res.render('update-password',{ message:message, username:req.session.username})
+  }
+})
+
+app.get('/update-password', function(req,res){
+  res.render('update-password', {username:req.session.username})
+})
+
 app.listen(3000,function(){
     console.log('Server is running')
 })
 
-app.get('/index',function(req,res){
-    if(req.session.userid == null){
-        res.redirect('/')
-      } else {
+let newDate = new Date(2018, 11, 13)
 
-      models.transaction.findAll({
-        where: {
-          userid: req.session.userid
-        }
-      }).then(function(transactions){
-          res.render('index',{transactions: transactions})
-      })
+models.transaction.update({
+    createdAt: newDate
+},
+{
+    where: {
+        id: 105
     }
 })
-
-
-//fetch a particular category
-app.post('/select-category',function(req,res){
-    let ddViewBy = req.body.ddViewBy
-    
-    models.transaction.findAll({
-        where:{
-            category: ddViewBy,
-            userid: req.session.userid
-        }
-    }).then(function(category){
-        res.render('index',{category:category})
-        console.log(category.amount)
-    })
-
-})  
-
-
-
-app.get('/logout', (req,res) =>{
-  req.session.destroy(function(err){
-  })
-  res.redirect('/')
+.then(function(){
+    console.log("updated date")
 })
-
-app.get('/',function(req,res){
-  res.render('login')
-})
-
-app.post('/new-transaction', function(req, res){
-    let transactionName = req.body.name 
-    let transactionAmount = req.body.amount 
-    let transactionCategory = req.body.category
-    let transactionDescription = req.body.description 
-
-    let newTransaction = models.transaction.build({
-        name: transactionName,
-        amount: transactionAmount,
-        category: transactionCategory,
-        description: transactionDescription,
-        userid: req.session.userid
-    })
-    newTransaction.save().then(function(){
-        res.redirect('/index')
-    })
-
-})
-
-app.post('/update-transaction', function(req,res){
-  
+.catch(function(error){
+    console.log(error)
 })

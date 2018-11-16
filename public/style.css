@@ -32,6 +32,14 @@ a{
     background-color:rgb(201, 250, 199);
     height: 100px;
     width: auto;
+    margin-left: 20px;
+    height: 100px;
+    width: 100px;
+}
+
+#top-bar{
+    background-color:#E8F7E7;
+
 }
 
 div{

@@ -3,14 +3,16 @@
   <head>
     <meta charset="utf-8">
     <title>Register</title>
+    <link href="/style.css" type="text/css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Baloo+Paaji|Poor+Story|Reenie+Beanie|Work+Sans:300,500,700" rel="stylesheet">
   </head>
   <body>
-    <div id="nav-bar">
-    <a href="/index"><img src="./logo.png"></img></a>
-    <div class='navBar'>
+    <div id="top-bar">
+    <a href="/user-index"><img class='logo' src="./logo.png"></img></a>
+  </div>
+    <div class='nav-bar'>
       <ul>
         <li><a href='/'>Login</a></li>
-        <li><a href='/index'>Home</a></li>
         <li><a href='/logout'>Log Out</a></li>
       </ul>
     </div>
@@ -21,9 +23,9 @@
           <input type='password' name='registerPassword' placeholder="Enter password"/>
           <input type='password' name='confirmPassword' placeholder="Re-type password"/>
           <input type='email' name='registerEmail' placeholder="Enter email" />
-          <input type="text" name="monthly_income" placeholder="Enter monthly income" />
           <input type='submit' value='Register'/>
         </form>
       </div>
+      {{message}}
   </body>
 </html>
