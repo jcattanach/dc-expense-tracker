@@ -35,18 +35,19 @@
         </select>
         <input type = "text" name = "amount" />
       </div>
+      <div><p>{{message}}</p></div>
     <input type = "submit" value = "Add Budget" onclick="evalForm(event)" />
   </form>
 
     <h3>Budgets</h3>
     <table>
-    {{#budgets}}
-      <tr>
+            <tr>
         <th></th>
         <th>Category</th>
         <th>Amount</th>
         <th></th>
       </tr>
+      {{#budgets}}
       <tr>
         <td>
           <form action = "/delete-budget" method = "POST">
@@ -69,7 +70,7 @@
           </div>
         </td>
       </tr>
-    {{/budgets}}
+      {{/budgets}}
     </table>
 
   </body>

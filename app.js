@@ -58,25 +58,43 @@ app.post('/register', function(req,res){
     let password = req.body.registerPassword
     let confirmPassword = req.body.confirmPassword
     let email = req.body.registerEmail
+    let errorMessage = null
+    let allowRegister = false
 
-    if(password == confirmPassword){
-        functions.user.addNewUser(username, password, email)
-        .then(function(userid){
-          categories.forEach(function(category){
-            console.log(category)
-            functions.budget.addNewUserBudget(userid,category,null)
-          })
-        })
-        .then(function(){
-            res.redirect('/')
-          })
-        .catch(function(error){
-            console.log(error)
-        })
-    }
-    else{
-        res.render('register',{ message : 'Your passwords do not match.'})
-    }
+    functions.user.usernameEmailTaken(username, email)
+    .then(function(results){
+        if(!results.usernameTaken && !results.emailTaken){
+            if(password == confirmPassword){
+                allowRegister = true
+            }
+            else{
+                errorMessage = "Passwords don't match."
+            }
+        }
+        else if(results.usernameTaken && !results.emailTaken){
+            errorMessage = 'Username already in use.'
+        }
+        else if(results.emailTaken && !results.emailTaken){
+            errorMessage = 'Email already in use.'
+        }
+        else {
+            errorMessage = "Username and email already in use"
+        }
+    })
+    .then(function(){
+        if(allowRegister){
+            functions.user.addNewUser(username, password, email)
+            .then(function(){
+                res.redirect('/')
+            })
+        }
+        else {
+            res.render('register',{message: errorMessage})
+        }  
+    })
+    .catch(function(error){
+        console.log(error)
+    })
 })
 
 app.get('/user-index',function(req,res){
@@ -90,7 +108,6 @@ app.get('/user-index',function(req,res){
     }
 })
 
-//fetch a particular category
 app.post('/filter-transactions',function(req,res){
   let userid = req.session.userid
   let category = req.body.category
@@ -101,27 +118,19 @@ app.post('/filter-transactions',function(req,res){
     res.redirect('/user-index')
   }else{functions.transaction.filterByTimeAndCategory(userid, category, timeFilter)
     .then(function(results){
-          categories = results
-          weekFilter(category, userid)
+        categories = results
+        weekFilter(category, userid)
     })
     .catch(function(error){
         console.log(error)
     })}
-
   function weekFilter(category, userid){
     functions.transaction.filterByTimeAndCategory(userid, category, 'week')
     .then(function(newResult){
-      getOneBudget(categories, newResult)
+        getOneBudget(categories, newResult)
     })}
   function getOneBudget(categories, newResult){
-
-    models.budget.findOne({
-      where:{
-          category: category,
-          userid: req.session.userid
-      }
-    }).then(function(budget){
-
+    functions.budget.getUserBudgetByCategory(userid, category).then(function(budget){
       let budgetUpdate = ''
 
       if(categories != null && budget != null){
@@ -138,22 +147,24 @@ app.post('/filter-transactions',function(req,res){
         let message = ''
 
         if(budgetRemaining <= 25 && budgetRemaining > 0){
-          let message = 'You have $25 or less remaining in your budget for this category'
+          message = 'You have $25 or less remaining in your budget for this category'
           res.render('index',{message:message, budgetUpdate:budgetUpdate, transactions:categories})
         } else if( budgetRemaining == 0){
-          let message = 'You have $0 remaining in your budget for this category'
+          message = 'You have $0 remaining in your budget for this category'
           res.render('index',{message:message, budgetUpdate:budgetUpdate, transactions:categories})
         } else if( budgetRemaining < 0){
-          let message = 'You are over your limit for this category'
+          message = 'You are over your limit for this category'
           res.render('index',{message:message, budgetUpdate:overBudgetUpdate, transactions:categories})
         } else if(budgetRemaining > 25) {
           res.render('index',{budgetUpdate:budgetUpdate, transactions:categories})
         }
-     } else {
-       res.render('index', {transactions:categories, budgetUpdate:"test", message:"test "})
      }
-
-
+     else if(categories != null){
+       res.render('index', {transactions:categories})
+     }
+     else {
+         res.render('index', {budgetUpdate: "No transactions to display"})
+     }
     })
   }
 })
@@ -162,6 +173,9 @@ app.get('/user-settings',function(req,res){
     functions.user.getUserById(req.session.userid)
     .then(function(user){
         res.render('account-info', {user: user})
+    })
+    .catch(function(error){
+        console.log(error)
     })
 })
 
@@ -177,15 +191,36 @@ app.get('/user-budgets',function(req,res){
 })
 
 app.post('/new-budget', function(req, res){
+    let userid = req.session.userid
     let category = req.body.category
     let amount = req.body.amount
-    functions.budget.addNewUserBudget(req.session.userid, category, amount)
+    let budgetMessage = null
+
+    functions.budget.budgetExists(userid, category)
+    .then(function(exists){
+        if(exists){
+            budgetMessage = "A budget for this category already exists."
+        }
+        else {
+            return functions.budget.addNewUserBudget(userid, category, amount)
+        }
+    })
     .then(function(){
-        res.redirect('/user-budgets')
+        functions.budget.getAllUserBudgets(req.session.userid)
+        .then(function(budgets){
+            res.render('budgets', {message: budgetMessage, budgets: budgets})
+        })
+        .catch(function(error){
+            console.log(error)
+        })
     })
     .catch(function(error){
         console.log(error)
     })
+
+
+
+    
 })
 
 app.post('/update-budget',function(req,res){
@@ -303,4 +338,21 @@ app.get('/update-password', function(req,res){
 
 app.listen(3000,function(){
     console.log('Server is running')
+})
+
+let newDate = new Date(2018, 11, 13)
+
+models.transaction.update({
+    createdAt: newDate
+},
+{
+    where: {
+        id: 105
+    }
+})
+.then(function(){
+    console.log("updated date")
+})
+.catch(function(error){
+    console.log(error)
 })

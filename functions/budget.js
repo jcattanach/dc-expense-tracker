@@ -36,6 +36,27 @@ module.exports = {
             })
         })
     },
+    budgetExists: function(userid, category){
+        return new Promise(function(resolve, reject){
+            models.budget.count({
+                where: {
+                    userid: userid,
+                    category: category
+                }
+            })
+            .then(function(count){
+                if(count > 0){
+                    resolve(true)
+                }
+                else {
+                    resolve(false)
+                }
+            })
+            .catch(function(error){
+                reject(error)
+            })
+        })
+    },
     // inserts new budget into budget table
     // input: userid, category, amount
     addNewUserBudget: function(userid, category, amount){

@@ -2,12 +2,12 @@ module.exports = {
     // removes metadata from query results
     getJSON : function(results){
         let output = null
-        if (results.constructor === Array){
+        if (results.constructor === Array && results.length != 0){
             output = results.map(function(object){
                 return object.get({plain: true})
             })
         }
-        else{
+        if(results.constructor !== Array){
             output = results.get({plain: true})
         }
         return output
@@ -28,7 +28,6 @@ module.exports = {
         if(timeFilter == "month"){
             date.setDate(1)
         }
-        console.log("returning", date)
         return date
     }
 }
