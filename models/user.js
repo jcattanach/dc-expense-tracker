@@ -6,8 +6,8 @@ module.exports = (sequelize, DataTypes) => {
     email: DataTypes.STRING
   }, {});
   user.associate = function(models) {
-    user.hasMany(models.transaction, {as: 'transaction', foreignKey: 'userid', onDelete: 'CASCADE'})
-    user.hasMany(models.budget, {as: 'budget', foreignKey: 'userid', onDelete: 'CASCADE'})
+    user.hasMany(models.transaction, {as: 'transaction', foreignKey: 'userid', onDelete : 'cascade', hooks:true})
+    user.hasMany(models.budget, {as: 'budget', foreignKey: 'userid', onDelete : 'cascade', hooks:true})
   };
   return user;
 };
