@@ -38,22 +38,45 @@ module.exports = {
     // input: userid, category, and time
     filterByTimeAndCategory: function(userid, category, timeFilter){
         let startDate = general.getStartDate(timeFilter)
-        return new Promise(function(resolve, reject){
-            models.transaction.findAll({
-                where: {
-                    userid: userid,
-                    category: category,
-                    createdAt:{
-                        $gte: startDate
+        if(category == "All")
+        {
+            console.log("in all")
+            return new Promise(function(resolve, reject){
+                models.transaction.findAll({
+                    where: {
+                        userid: userid,
+                        createdAt:{
+                            $gte: startDate
+                        }
                     }
-                }
-            }).then(function(result){
-                resolve(general.getJSON(result))
+                }).then(function(result){
+                    resolve(general.getJSON(result))
+                })
+                .catch(function(error){
+                    reject(error)
+                })
             })
-            .catch(function(error){
-                reject(error)
+        }
+        else {
+            console.log("in else")
+            return new Promise(function(resolve, reject){
+                models.transaction.findAll({
+                    where: {
+                        userid: userid,
+                        category: category,
+                        createdAt:{
+                            $gte: startDate
+                        }
+                    }
+                }).then(function(result){
+                    resolve(general.getJSON(result))
+                })
+                .catch(function(error){
+                    reject(error)
+                })
             })
-        })
+        }
+            
     },
     // inserts new transaction to transaction table
     // input: name, amount ,catgeory, and description(optional)
