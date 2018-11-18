@@ -319,7 +319,6 @@ app.post('/update-password', function(req,res){
                 functions.user.updateUserPassword(req.session.userid, hash)
               })
             })
-
         }else{
             res.render('update-password',{message : 'Old password is incorrect', username:req.session.username})
         }
