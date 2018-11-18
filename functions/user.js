@@ -64,7 +64,7 @@ module.exports = {
             })
             .then(function(){
                 return models.user.count({
-                    where: 
+                    where:
                     {
                         email: email
                     }
@@ -75,7 +75,7 @@ module.exports = {
                         }
                     })
                 }
-                    
+
             )
             .then(function(){
                 resolve({usernameTaken: usernameTaken, emailTaken: emailTaken})
@@ -83,7 +83,7 @@ module.exports = {
             .catch(function(error){
                 reject(error)
             })
-            
+
 
         })
     },
@@ -126,13 +126,14 @@ module.exports = {
         })
     },
     // removes user from user table
-    // input: username
+    // input: userid
     deleteUserByUserID: function(userid){
         return new Promise(function(resolve, reject){
             models.user.destroy({
                 where:{
                     id: userid
-                }
+                },
+                cascade: true
             }).then(function(){
                 resolve()
             })

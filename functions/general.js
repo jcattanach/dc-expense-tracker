@@ -3,7 +3,7 @@ module.exports = {
     getJSON : function(results){
         let output = null
         if(results == null){
-          return null
+            return null
         }
         if (results.constructor === Array && results.length != 0){
             output = results.map(function(object){

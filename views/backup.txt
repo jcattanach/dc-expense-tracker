@@ -52,7 +52,8 @@
                 <h3 style="color: rgb(192, 159, 50)">Filters</h3>
                     <form action="/filter-transactions" method="POST">
                         <select name="category">
-                            <option value="All">All</option>
+                            <option value="0">Select Category:</option>
+                            <option value="All">All Expenses</option>
                             <option value="Food">Food</option>
                             <option value="Education">Education</option>
                             <option value="Housing">Housing</option>

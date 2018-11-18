@@ -1,3 +1,8 @@
+html {
+    font-family: 'Quicksand', sans-serif;
+    color: rgb(85, 85, 85);
+}
+
 body{
     margin:0 !important;
 }
@@ -17,6 +22,16 @@ a{
 }
 
 .logo{
+    position: absolute;
+    top: -40px;
+    height: 200px;
+    width: 200px;
+}
+
+#top-bar{
+    background-color:rgb(201, 250, 199);
+    height: 100px;
+    width: auto;
     margin-left: 20px;
     height: 100px;
     width: 100px;
@@ -31,49 +46,80 @@ div{
     display:flex;
     flex-direction: column;
 }
-/* ----------------------------------------------------------------------- */
-
-#snackbar {
-    visibility: hidden; /* Hidden by default. Visible on click */
-    min-width: 250px; /* Set a default minimum width */
-    margin-left: -125px; /* Divide value of min-width by 2 */
-    background-color: #333; /* Black background color */
-    color: #fff; /* White text color */
-    text-align: center; /* Centered text */
-    border-radius: 2px; /* Rounded borders */
-    padding: 16px; /* Padding */
-    position: fixed; /* Sit on top of the screen */
-    z-index: 1; /* Add a z-index if needed */
-    left: 50%; /* Center the snackbar */
-    bottom: 30px; /* 30px from the bottom */
+.welcome {
+    font-size: 40px;
+    position: relative;
+    margin: 30px;
+    margin-left: 720px;
+}
+.card1 {
+    position: relative;
+    left: 650px;
+    margin: 20px;
+    width: 500px;
+    height: 250px;;
+    border-style: solid;
+    border-radius: 20px;
+    border-width: 2px 2px 2px 2px;
+    border-color: rgb(28, 117, 36);
+    box-shadow: 0px 9px 30px 4px #888888;
+}
+.card1Cont{
+    position: absolute;
+    left: 50px;
+    padding: 10px;
+    color: rgb(71, 192, 60);
+}
+.transactionBox{
+    border:none;
+    font-style: 20px;
+}
+#cat {
+    border-radius: 20px;;
+    font-style: 20px;
+}
+.Addbtn {
+    background: white;
+    border: none;
+    color:black;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+}
+.Addbtn:hover{
+    border-radius: 20px;
+    background-color: #4CAF50; 
+    color: white;
 }
 
-/* Show the snackbar when clicking on a button (class added with JavaScript) */
-#snackbar.show {
-    visibility: visible; /* Show the snackbar */
-    /* Add animation: Take 0.5 seconds to fade in and out the snackbar. 
-   However, delay the fade out process for 2.5 seconds */
-   -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-   animation: fadein 0.5s, fadeout 0.5s 2.5s;
+/* card2 */
+.card2 {
+    position: relative;
+    top:10px;
+    left: 520px;
+    margin: 20px;
+    padding: 30px;
+    width: 700px;
+    border-style: solid;
+    border-radius: 20px;
+    border-width: 2px 2px 2px 2px;
+    border-color: rgb(163, 111, 28);
+    box-shadow: 0px 9px 30px 4px #888888;
 }
-
-/* Animations to fade the snackbar in and out */
-@-webkit-keyframes fadein {
-    from {bottom: 0; opacity: 0;} 
-    to {bottom: 30px; opacity: 1;}
+.card2Cont{
+    position: inherit;
+    left: 50px;
+    padding: 10px;
+    color: rgb(163, 124, 18);
 }
-
-@keyframes fadein {
-    from {bottom: 0; opacity: 0;}
-    to {bottom: 30px; opacity: 1;}
-}
-
-@-webkit-keyframes fadeout {
-    from {bottom: 30px; opacity: 1;} 
-    to {bottom: 0; opacity: 0;}
-}
-
-@keyframes fadeout {
-    from {bottom: 30px; opacity: 1;}
-    to {bottom: 0; opacity: 0;}
-}
+/* .transactions {
+     position: absolute;
+    top: 200px;
+    left: 50px; 
+    padding: 10px;
+    color: black;
+}  */

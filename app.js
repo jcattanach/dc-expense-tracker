@@ -8,8 +8,6 @@ const session = require('express-session')
 const bcrypt = require('bcrypt')
 const saltRounds = 10
 
-categories = ["Food","Education","Housing","Transportation","Entertainment","Personal Expenses","Bills","Other"]
-
 app.use(session({
   secret: '1a2s3d',
   resave: false,
@@ -91,7 +89,7 @@ app.post('/register', function(req,res){
         }
         else {
             res.render('register',{message: errorMessage})
-        }  
+        }
     })
     .catch(function(error){
         console.log(error)
@@ -109,63 +107,60 @@ app.get('/user-index',function(req,res){
     }
 })
 
-app.post('/filter-transactions/:category ',function(req,res){
-  let userid = req.session.userid
-  let category = req.body.category
-  let timeFilter = req.body.timeFilter
-  let categories = null
+app.post('/filter-transactions',function(req,res){
+    let userid = req.session.userid
+    let category = req.body.category
+    let timeFilter = req.body.timeFilter
+    let categories = null
 
-  if (category== "All"){
-    res.redirect('/user-index')
-  }else{functions.transaction.filterByTimeAndCategory(userid, category, timeFilter)
+    functions.transaction.filterByTimeAndCategory(userid, category, timeFilter)
     .then(function(results){
         categories = results
         weekFilter(category, userid)
     })
     .catch(function(error){
         console.log(error)
-    })}
-  function weekFilter(category, userid){
-    functions.transaction.filterByTimeAndCategory(userid, category, 'week')
-    .then(function(newResult){
-        getOneBudget(categories, newResult)
-    })}
-  function getOneBudget(categories, newResult){
-    functions.budget.getUserBudgetByCategory(userid, category).then(function(budget){
-      let budgetUpdate = ''
+    })
+    function weekFilter(category, userid){
+        functions.transaction.filterByTimeAndCategory(userid, category, 'week')
+        .then(function(newResult){
+            getOneBudget(categories, newResult)
+        })}
+    function getOneBudget(categories, newResult){
+        functions.budget.getUserBudgetByCategory(userid, category).then(function(budget){
+            let budgetUpdate = ''
 
-      if(categories != null && budget != null){
-        let sum = 0
-        for(let i = 0; i < newResult.length; i++){
-          sum += newResult[i].amount
+        if(categories != null && budget != null){
+            let sum = 0
+            for(let i = 0; i < newResult.length; i++){
+            sum += newResult[i].amount
+            }
+            let userBudget = budget.amount
+            let budgetRemaining = userBudget - sum
+            budgetUpdate = `Your weekly budget is $${userBudget}. You have $${budgetRemaining} remaining.`
+            let overBudget = Math.abs(budgetRemaining)
+            overBudgetUpdate = `Your weekly budget is $${userBudget}. You are over budget by $${overBudget}.`
+            let message = ''
+
+            if(budgetRemaining <= 25 && budgetRemaining > 0){
+                message = 'You have $25 or less remaining in your budget for this category'
+                res.render('index',{message:message, budgetUpdate:budgetUpdate, transactions:categories, username:req.session.username})
+            } else if( budgetRemaining == 0){
+                message = 'You have $0 remaining in your budget for this category'
+                res.render('index',{message:message, budgetUpdate:budgetUpdate, transactions:categories, username:req.session.username})
+            } else if( budgetRemaining < 0){
+                message = 'You are over your limit for this category'
+                res.render('index',{message:message, budgetUpdate:overBudgetUpdate, transactions:categories, username:req.session.username})
+            } else if(budgetRemaining > 25) {
+                res.render('index',{budgetUpdate:budgetUpdate, transactions:categories, username:req.session.username})
+            }
         }
-
-        let userBudget = budget.amount
-        let budgetRemaining = userBudget - sum
-        budgetUpdate = `Your weekly budget is $${userBudget}. You have $${budgetRemaining} remaining.`
-        let overBudget = Math.abs(budgetRemaining)
-        overBudgetUpdate = `Your weekly budget is $${userBudget}. You are over budget by $${overBudget}.`
-        let message = ''
-
-        if(budgetRemaining <= 25 && budgetRemaining > 0){
-          message = 'You have $25 or less remaining in your budget for this category'
-          res.render('index',{message:message, budgetUpdate:budgetUpdate, transactions:categories})
-        } else if( budgetRemaining == 0){
-          message = 'You have $0 remaining in your budget for this category'
-          res.render('index',{message:message, budgetUpdate:budgetUpdate, transactions:categories})
-        } else if( budgetRemaining < 0){
-          message = 'You are over your limit for this category'
-          res.render('index',{message:message, budgetUpdate:overBudgetUpdate, transactions:categories})
-        } else if(budgetRemaining > 25) {
-          res.render('index',{budgetUpdate:budgetUpdate, transactions:categories})
+        else if(categories != null){
+            res.render('index', {transactions:categories, username:req.session.username})
         }
-     }
-     else if(categories != null){
-       res.render('index', {transactions:categories})
-     }
-     else {
-         res.render('index', {budgetUpdate: "No transactions to display"})
-     }
+        else {
+            res.render('index', {budgetUpdate: "No transactions to display",username:req.session.username})
+        }
     })
   }
 })
@@ -173,7 +168,7 @@ app.post('/filter-transactions/:category ',function(req,res){
 app.get('/user-settings',function(req,res){
     functions.user.getUserById(req.session.userid)
     .then(function(user){
-        res.render('account-info', {user: user})
+        res.render('account-info', {user: user, username:req.session.username})
     })
     .catch(function(error){
         console.log(error)
@@ -184,7 +179,7 @@ app.get('/user-budgets',function(req,res){
     functions.budget.getAllUserBudgets(req.session.userid)
     .then(function(budgets){
         console.log(budgets)
-        res.render('budgets', {budgets: budgets})
+        res.render('budgets', {budgets: budgets, username:req.session.username})
     })
     .catch(function(error){
         console.log(error)
@@ -209,7 +204,7 @@ app.post('/new-budget', function(req, res){
     .then(function(){
         functions.budget.getAllUserBudgets(req.session.userid)
         .then(function(budgets){
-            res.render('budgets', {message: budgetMessage, budgets: budgets})
+            res.render('budgets', {message: budgetMessage, budgets: budgets, username:req.session.username})
         })
         .catch(function(error){
             console.log(error)
@@ -218,10 +213,6 @@ app.post('/new-budget', function(req, res){
     .catch(function(error){
         console.log(error)
     })
-
-
-
-    
 })
 
 app.post('/update-budget',function(req,res){
@@ -297,12 +288,19 @@ app.get('/logout', (req,res) =>{
 
 app.post('/delete-account', function(req,res){
   let userid = req.session.userid
-  functions.user.deleteUserByUserID(userid)
-  res.redirect('/logout')
+  functions.transaction.deleteTransactionByUserID(userid).then(function(){
+    functions.budget.deleteBudgetByUserID(userid)
+  }).then(function(){
+    functions.user.deleteUserByUserID(userid)
+  }).then(function(){
+    req.session.destroy(function(err){
+    res.redirect('/logout')
+    })
+  })
 })
 
 app.get('/delete-account', function(req,res){
-  res.render('delete-account')
+  res.render('delete-account', {username:req.session.username})
 })
 
 app.post('/update-password', function(req,res){
@@ -316,7 +314,7 @@ app.post('/update-password', function(req,res){
     let dbPassword = userInfo.password
     bcrypt.compare(oldPassword, dbPassword, function(err, result) {
         if(result == true){
-            res.render('update-password',{message : 'Password updated'})
+            res.render('update-password',{message : 'Password updated', username:req.session.username})
             bcrypt.genSalt(saltRounds, function(err, salt){
                 bcrypt.hash(newPassword, salt, function(err, hash){
                 functions.user.updateUserPassword(req.session.userid, hash)
@@ -324,17 +322,17 @@ app.post('/update-password', function(req,res){
             })
 
         }else{
-            res.render('update-password',{message : 'Old password is incorrect'})
+            res.render('update-password',{message : 'Old password is incorrect', username:req.session.username})
         }
     })
   })} else {
     let message = 'Your new passwords do not match'
-    res.render('update-password',{ message:message})
+    res.render('update-password',{ message:message, username:req.session.username})
   }
 })
 
 app.get('/update-password', function(req,res){
-  res.render('update-password')
+  res.render('update-password', {username:req.session.username})
 })
 
 app.listen(3000,function(){
