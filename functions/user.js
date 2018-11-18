@@ -48,6 +48,45 @@ module.exports = {
             })
         })
     },
+    usernameEmailTaken: function(username, email){
+        emailTaken = false
+        usernameTaken = false
+        return new Promise(function(resolve, reject){
+            models.user.count({
+                where: {
+                    username: username
+                }
+            })
+            .then(function(count){
+                if(count > 0){
+                    usernameTaken = true
+                }
+            })
+            .then(function(){
+                return models.user.count({
+                    where: 
+                    {
+                        email: email
+                    }
+                    })
+                    .then(function(count){
+                        if(count> 0){
+                            emailTaken = true
+                        }
+                    })
+                }
+                    
+            )
+            .then(function(){
+                resolve({usernameTaken: usernameTaken, emailTaken: emailTaken})
+            })
+            .catch(function(error){
+                reject(error)
+            })
+            
+
+        })
+    },
     // inserts new user to user table
     // input: username, password, email
     addNewUser: function(username, password, email){
@@ -88,11 +127,11 @@ module.exports = {
     },
     // removes user from user table
     // input: username
-    deleteUserByUsername: function(username){
+    deleteUserByUserID: function(userid){
         return new Promise(function(resolve, reject){
             models.user.destroy({
                 where:{
-                    username: username
+                    id: userid
                 }
             }).then(function(){
                 resolve()
@@ -102,52 +141,27 @@ module.exports = {
             })
         })
     },
-    updateUser: function(userid, password = null, email = null){
-        if (password == null)
-        {
-            password = models.user.findOne({
-                where: {
-                    id: userid
-                }
-            }).get({plain: true})
-        }
-        if (email == null){
-            email = models.user.findOne({
-                where: {
-                    id: userid
-                }
-            }).get({plain: true})
-        }
+    updateUserEmail: function(userid, email){
         return new Promise(function(resolve, reject){
             models.user.update({
-                password: password,
                 email: email
-            },
-            {
-                where: {
-                    id: userid
-                }
-            })
-            .then(function(user){
-                if(password != null){
-                    user.updateAttributes({
-                        password: password
-                    })
-                }
-                if(email != null){
-                    user.updateAttributes({
-                        email: email
-                    })
-                }
-            })
+              },
+              {
+                  where :
+                  {
+                      id:userid
+                  }
+              }
+            )
             .then(function(){
                 resolve()
             })
             .catch(function(error){
-                resject(error)
+                reject(error)
             })
         })
-    },
+    }
+    ,
     updateUserPassword: function(userid, password){
         return new Promise(function(resolve, reject){
             models.user.update({
@@ -164,7 +178,7 @@ module.exports = {
                 resolve()
             })
             .catch(function(error){
-                resject(error)
+                reject(error)
             })
         })
     },
