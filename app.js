@@ -56,7 +56,7 @@ app.post('/register', function(req,res){
     let password = req.body.registerPassword
     let confirmPassword = req.body.confirmPassword
     let email = req.body.registerEmail
-    let errorMessage = null
+    // let errorMessage = null
     let allowRegister = false
 
     functions.user.usernameEmailTaken(username, email)
@@ -76,6 +76,7 @@ app.post('/register', function(req,res){
             errorMessage = 'Email already in use.'
         }
         else {
+        
             errorMessage = "Username and email already in use"
         }
     })
