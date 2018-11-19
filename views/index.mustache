@@ -7,17 +7,19 @@
     </head>
     <body>
         <div id="top-bar">
-            <a href="/user-index"><img class="logo" src="./logo.png"></img></a>
-            <a class="welcome">Welcome,&nbsp{{username}}!</a>
+          <ul class="nav">
+            <li><a href="/user-index"><img class='logo' src="./logo.png"></img></a></li>
+            <li><label class="welcome">Welcome,&nbsp{{username}}!</label></li>
+            <li><a href='/user-settings'>User</a></li>
+            <li><a href='/logout'>Log Out</a></li>
+          </ul>
         </div>
-        <div class="nav-bar">
+        <!-- <div class="nav-bar">
             <div class="user-settings">Account</div>
                 <ul>
-                    
+
                 </ul>
-        </div>
-        {{! <li><a href='/user-settings'>User</a></li>
-                    <li><a href='/logout'>Log Out</a></li> }}
+        </div> -->
         <div class="card1">
             <div class="card1Cont">
             <h1>Add New Transactions</h1>
@@ -45,7 +47,7 @@
                 <div class="pngPlus"></div>
             </div>
         </div>
-        
+
         <div class="card2">
             <div class="card2Cont">
                 <h2 style="color: rgb(192, 159, 50)">Transactions</h2>
@@ -70,13 +72,13 @@
                         </select>
                         <input type = "submit" value = "Filter" />
                     </form>
-              
+
           <h4>{{budgetUpdate}}</h4>
           <h4>{{message}}</h4>
-        
+
                 {{! <div class="transactions"> }}
                     {{#transactions}}
-                    <h3>{{name}}</h3><p>---- Amount: ${{amount}}---- Category: {{category}}--- Description: {{description}}</p>
+                    <h3>{{name}}</h3><p>${{amount}}---- Category: {{category}}</p>
                         <form action="/delete-transaction" method="POST">
                             <input type="hidden" name="id" value="{{id}}"/>
                             <input type="submit" value="Remove" />
@@ -87,7 +89,7 @@
                         </form>
                     {{/transactions}}
              </div>
-          
+
         </div>
     </body>
     <script src="/client.js"></script>

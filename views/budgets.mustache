@@ -8,8 +8,10 @@
   </head>
   <body>
     <div id="top-bar">
-      <a href="/user-index"><img class='logo' src="./logo.png"></img></a>
-      <label>{{username}}</label>
+      <ul class="nav">
+        <li><a href="/user-index"><img class='logo' src="./logo.png"></img></a></li>
+        <li><label class="welcome">Welcome,&nbsp{{username}}!</label></li>
+      </ul>
     </div>
     <div class='nav-bar'>
       <ul>
@@ -20,6 +22,7 @@
       <li><a href = "/user-settings">Account Details</a></li>
       <li><a href = "/user-budgets">Budgets</a></li>
     </ul>
+    <div class="card1 card1Cont">
     <h4>Add Budget</h4>
    <form action="/new-budget" method="POST">
       <div class="custom-select" style="width:200px">
@@ -39,7 +42,8 @@
       <div><p>{{message}}</p></div>
     <input type = "submit" value = "Add Budget" onclick="evalForm(event)" />
   </form>
-
+</div>
+<div class="card2 card2Cont">
     <h3>Budgets</h3>
     <table>
             <tr>
@@ -73,6 +77,6 @@
       </tr>
       {{/budgets}}
     </table>
-
+</div>
   </body>
 </html>

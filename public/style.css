@@ -3,6 +3,10 @@ html {
     color: rgb(85, 85, 85);
 }
 
+li {
+  list-style: none;
+}
+
 body{
     margin:0 !important;
 }
@@ -12,47 +16,48 @@ body{
     font-size:14px;
     font-family: 'Baloo Paaji', cursive;
     list-style: none;
+    display: flex;
     flex-direction: row !important;
     justify-content: flex-end;
     margin-left: 20px;
 
+
 }
-a{
-    text-decoration:none;
+.nav {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  background-color:#E8F7E7;
+  box-sizing: border-box;
+  height: 100px;
+  width: 100%;
+
 }
 
 .logo{
-    position: absolute;
-    top: -40px;
-    height: 200px;
+    height: 80px;
     width: 200px;
 }
 
-#top-bar{
+/* #top-bar{
     background-color:rgb(201, 250, 199);
     box-sizing: border-box;
     height: 100px;
     width: 100%;
-}
+} */
 
 #top-bar{
     background-color:#E8F7E7;
+    display: flex;
 
 }
 
-div{
-    display:flex;
-    flex-direction: column;
-}
 .welcome {
     font-size: 40px;
-    position: relative;
     margin: 30px;
-    margin-left: 720px;
 }
 .card1 {
-    position: relative;
-    left: 650px;
     margin: 20px;
     width: 500px;
     height: 250px;;
@@ -63,8 +68,6 @@ div{
     box-shadow: 0px 9px 30px 4px #888888;
 }
 .card1Cont{
-    position: absolute;
-    left: 50px;
     padding: 10px;
     color: rgb(71, 192, 60);
 }
@@ -85,7 +88,7 @@ div{
     text-decoration: none;
     display: inline-block;
     font-size: 12px;
-    -webkit-transition-duration: 0.4s; /* Safari */
+    -webkit-transition-duration: 0.4s;
     transition-duration: 0.4s;
 }
 .Addbtn:hover{
@@ -94,11 +97,7 @@ div{
     color: white;
 }
 
-/* card2 */
 .card2 {
-    position: relative;
-    top:10px;
-    left: 520px;
     margin: 20px;
     padding: 30px;
     width: 700px;
@@ -109,15 +108,10 @@ div{
     box-shadow: 0px 9px 30px 4px #888888;
 }
 .card2Cont{
-    position: inherit;
-    left: 50px;
     padding: 10px;
     color: rgb(163, 124, 18);
 }
-/* .transactions {
-     position: absolute;
-    top: 200px;
-    left: 50px;
+.transactions {
     padding: 10px;
     color: black;
-}  */
+}

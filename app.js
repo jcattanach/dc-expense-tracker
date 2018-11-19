@@ -20,6 +20,11 @@ app.engine('mustache', mustacheExpress())
 app.set("views", "./views")
 app.set("view engine", "mustache")
 
+
+app.get('/register',function(req,res){
+  res.render('register')
+})
+
 app.get('/',function(req,res){
     res.render('login')
   })
@@ -47,9 +52,6 @@ app.post('/login', function(req,res){
     }})
 })
 
-app.get('/register',function(req,res){
-    res.render('register')
-})
 
 app.post('/register', function(req,res){
     let username = req.body.registerUsername
@@ -76,7 +78,7 @@ app.post('/register', function(req,res){
             errorMessage = 'Email already in use.'
         }
         else {
-        
+
             errorMessage = "Username and email already in use"
         }
     })
