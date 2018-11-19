@@ -8,13 +8,24 @@
   </head>
   <body>
     <div id="top-bar">
-        <a href="/user-index"><img class="logo" src="./logo.png"></img></a>
-        <label>{{username}}</label>
-    </div>
-    <div class="nav-bar">
-        <li><a href='/user-settings'>User</a></li>
-        <li><a href='/logout'>Log Out</a></li>
-    </div>
+            <a href="/user-index"><img class="logo" src="./logo.png"></img></a>
+            <a class="welcome">&nbsp{{username}},</a>
+            <div id="main">
+                <button class="openbtn" onclick="openNav()">User Profile</button> 
+                {{! &#9776; }}
+            </div>
+
+            <div class="nav-bar">
+            <div id="mySidebar" class="sidebar">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                <a href="/user-settings">Settings</a>
+                <a href = "/user-budgets">Budgets</a>
+                <a href="/logout">Log Out</a>
+                </div>
+
+                
+            </div>
+        </div>
     <h1>Delete Account</h1>
       <div class='loginForm'>
         <form action='/delete-account' method='POST'>
@@ -25,4 +36,6 @@
       </div>
       {{message}}
   </body>
+   <script src="/client.js"></script>
+    <script src="/popupS.min.js"></script>
 </html>

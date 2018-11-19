@@ -6,23 +6,33 @@
         <link rel="stylesheet" href="/popupS.min.css">
     </head>
     <body>
+        
         <div id="top-bar">
             <a href="/user-index"><img class="logo" src="./logo.png"></img></a>
-            <a class="welcome">Welcome,&nbsp{{username}}!</a>
+            <a class="welcome">&nbsp{{username}},</a>
+            <div id="main">
+                <button class="openbtn" onclick="openNav()">User Profile</button> 
+                {{! &#9776; }}
+            </div>
+
+            <div class="nav-bar">
+            <div id="mySidebar" class="sidebar">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                <a href="/user-settings">Settings</a>
+                <a href = "/user-budgets">Budgets</a>
+                <a href="/logout">Log Out</a>
+                </div>
+
+                
+            </div>
         </div>
-        <div class="nav-bar">
-            <div class="user-settings">Account</div>
-                <ul>
-                    
-                </ul>
-        </div>
-        {{! <li><a href='/user-settings'>User</a></li>
-                    <li><a href='/logout'>Log Out</a></li> }}
+        
+        
         <div class="card1">
             <div class="card1Cont">
             <h1>Add New Transactions</h1>
             <form action="/new-transaction" method="POST">
-                <input class="transactionBox" type="text" name="name" placeholder="Enter Transaction Name"/>
+                <input class="transactionBox" type="text" name="name" placeholder="Enter Name"/>
                 <p></p>
                 <input class="transactionBox" type="text" name="amount" placeholder="Enter Amount"/>
                  <p></p>
@@ -81,14 +91,12 @@
                             <input type="hidden" name="id" value="{{id}}"/>
                             <input type="submit" value="Remove" />
                         </form>
-                        <form action  = "/update-transaction" method = "POST">
-                            <input type = "hidden" name = "id" value = "{{id}}" />
-                            <input type = "submit" value = "Update" />
-                        </form>
+                    
                     {{/transactions}}
              </div>
           
         </div>
+        
     </body>
     <script src="/client.js"></script>
     <script src="/popupS.min.js"></script>

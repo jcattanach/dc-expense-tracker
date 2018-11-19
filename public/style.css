@@ -1,59 +1,74 @@
 html {
     font-family: 'Quicksand', sans-serif;
     color: rgb(85, 85, 85);
+    
 }
 
 body{
     margin:0 !important;
+    display:flex;
+    flex-direction: column;
+    
+}
+
+.register{
+    
+    background-color:#E8F7E7;
+}
+.login{
+  
+    background-color:#E8F7E7;
 }
 
 .nav-bar{
-    text-transform: uppercase;
-    font-size:14px;
+    font-size:10px;
     font-family: 'Baloo Paaji', cursive;
-    list-style: none;
-    flex-direction: row !important;
-    justify-content: flex-end;
-    margin-left: 20px;
+  
+    
 
+}
+
+#top-bar{
+    background-color:#E8F7E7;
+    display:flex;
+    flex-direction: row;
+    justify-content: flex-end;
 }
 a{
     text-decoration:none;
 }
 
 .logo{
-    position: absolute;
-    top: -40px;
-    height: 200px;
-    width: 200px;
+    margin-right: 850px;
+    margin-top:-30px;
+    height: 140px;
+    width: 140px;
+    margin-left: 30px;
+    margin-bottom: -30px;
 }
 
-#top-bar{
-    background-color:rgb(201, 250, 199);
-    box-sizing: border-box;
-    height: 100px;
-    width: 100%;
-}
 
-#top-bar{
-    background-color:#E8F7E7;
 
-}
-
-div{
+/* div{
     display:flex;
     flex-direction: column;
-}
+} */
 .welcome {
-    font-size: 40px;
-    position: relative;
-    margin: 30px;
-    margin-left: 720px;
+
+    font-size: 20px;
+    margin-top:20px;
+}
+
+.center{
+    display: flex;
+    flex-direction: column;
+    
 }
 .card1 {
-    position: relative;
-    left: 650px;
-    margin: 20px;
+    
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left:400px;
     width: 500px;
     height: 250px;;
     border-style: solid;
@@ -63,7 +78,7 @@ div{
     box-shadow: 0px 9px 30px 4px #888888;
 }
 .card1Cont{
-    position: absolute;
+    
     left: 50px;
     padding: 10px;
     color: rgb(71, 192, 60);
@@ -71,19 +86,32 @@ div{
 .transactionBox{
     border:none;
     font-style: 20px;
+    margin-left:30px;
 }
+
+input::placeholder{
+    font-family: 'Quicksand', sans-serif;
+}
+
+select{
+    font-family: 'Quicksand', sans-serif;
+}
+.custom-select{
+    margin-left: 30px;
+}
+
 #cat {
     border-radius: 20px;;
     font-style: 20px;
 }
 .Addbtn {
+    margin-left: 150px;
     background: white;
     border: none;
     color:black;
     padding: 15px 32px;
     text-align: center;
     text-decoration: none;
-    display: inline-block;
     font-size: 12px;
     -webkit-transition-duration: 0.4s; /* Safari */
     transition-duration: 0.4s;
@@ -96,10 +124,10 @@ div{
 
 /* card2 */
 .card2 {
-    position: relative;
-    top:10px;
-    left: 520px;
-    margin: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left:260px;
+    
     padding: 30px;
     width: 700px;
     border-style: solid;
@@ -114,10 +142,82 @@ div{
     padding: 10px;
     color: rgb(163, 124, 18);
 }
-/* .transactions {
-     position: absolute;
-    top: 200px;
-    left: 50px;
-    padding: 10px;
+h1{
+    margin-left:65px;
+}
+#budget-title{
+    margin-left:140px;
+}
+h2{
+    margin-left:250px;
+}
+/* The sidebar menu */
+.sidebar {
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Stay on top */
+    top: 0;
+    left: 0;
+    background-color: #111; /* Black*/
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 60px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidebar */
+}
+
+/* The sidebar links */
+.sidebar a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidebar a:hover {
+    color: #f1f1f1;
+}
+
+/* Position and style the close button (top right corner) */
+.sidebar .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 20px;
+    margin-left: 50px;
+}
+
+/* The button used to open the sidebar */
+.openbtn {
+    background-color: transparent;
+    font-size: 20px;
+    font-family: inherit;
+    cursor: pointer;
     color: black;
-}  */
+    border: none;
+    outline: none;
+    margin-bottom: 20px;
+    margin-top:20px;
+    width: 150px;
+   
+    
+}
+
+.openbtn:hover {
+    color: #4CAF50;
+}
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main {
+    transition: margin-left .5s; /* If you want a transition effect */
+    margin-left: 0 !important;
+    
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+    .sidebar {padding-top: 15px;}
+    .sidebar a {font-size: 18px;}
+}

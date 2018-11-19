@@ -7,20 +7,29 @@
     <link href="https://fonts.googleapis.com/css?family=Baloo+Paaji|Poor+Story|Reenie+Beanie|Work+Sans:300,500,700" rel="stylesheet">
   </head>
   <body>
-    <div id="top-bar">
-      <a href="/user-index"><img class='logo' src="./logo.png"></img></a>
-      <label>{{username}}</label>
-    </div>
-    <div class='nav-bar'>
-      <ul>
-        <li><a href='/logout'>Log Out</a></li>
-      </ul>
-    </div>
-    <ul>
-      <li><a href = "/user-settings">Account Details</a></li>
-      <li><a href = "/user-budgets">Budgets</a></li>
-    </ul>
-    <h4>Add Budget</h4>
+        <div id="top-bar">
+            <a href="/user-index"><img class="logo" src="./logo.png"></img></a>
+            <a class="welcome">&nbsp{{username}},</a>
+            <div id="main">
+                <button class="openbtn" onclick="openNav()">User Profile</button> 
+                {{! &#9776; }}
+            </div>
+
+            <div class="nav-bar">
+            <div id="mySidebar" class="sidebar">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                <a href="/user-settings">Settings</a>
+                <a href = "/user-budgets">Budgets</a>
+                <a href="/logout">Log Out</a>
+                </div>
+
+                
+            </div>
+        </div>
+
+    <div class="card1">
+      <div class="card1Cont">
+    <h1 id="budget-title">Add Budget</h1>
    <form action="/new-budget" method="POST">
       <div class="custom-select" style="width:200px">
         <label for = "category">
@@ -34,15 +43,18 @@
           <option value="Bills">Bills</option>
           <option value="Other">Other</option>
         </select>
-        <input type = "text" name = "amount" />
+        <input class="transactionBox" type = "text" name = "amount" placeholder="Enter Amount"/>
       </div>
       <div><p>{{message}}</p></div>
-    <input type = "submit" value = "Add Budget" onclick="evalForm(event)" />
+    <input class="Addbtn" type = "submit" value = "Add Budget" onclick="evalForm(event)" />
   </form>
+   <div class="pngPlus"></div>
+            </div>
+        </div>
 
     <h3>Budgets</h3>
     <table>
-            <tr>
+        <tr>
         <th></th>
         <th>Category</th>
         <th>Amount</th>
@@ -75,4 +87,6 @@
     </table>
 
   </body>
+   <script src="/client.js"></script>
+    <script src="/popupS.min.js"></script>
 </html>
