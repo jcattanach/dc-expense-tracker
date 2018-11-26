@@ -1,4 +1,4 @@
-## Expense Tracker
+## Budget Buddy
 * **Purpose of the app:** 
    This app was created to encourage users to keep track of their expenses while faciliting the view of the transactions for them. 
 * **How to use:**
