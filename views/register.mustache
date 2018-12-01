@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Register</title>
+    <link href="/style.css" type="text/css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Baloo+Paaji|Poor+Story|Reenie+Beanie|Work+Sans:300,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="/popupS.min.css">
+  </head>
+  <body>
+    <div class="register">
+    <a href="/user-index"><img class='logo' src="./logo.png"></img></a>
+    </div>
+    <h1>Register</h1>
+      <div class='loginForm'>
+        <form action='/register' method='POST'>
+          <input type='text' name='registerUsername' placeholder="Enter username"/>
+          <input type='password' name='registerPassword' placeholder="Enter password"/>
+          <input type='password' name='confirmPassword' placeholder="Re-type password"/>
+          <input type='email' name='registerEmail' placeholder="Enter email" />
+          <input type='submit' value='Register' onclick="usernameEmailTaken()"/>
+          <div id ="snackbar">{{message}}</div>
+        </form>
+      </div>
+
+  </body>
+   <script src="/client.js"></script>
+   <script src="/popupS.min.js"></script>
+</html>

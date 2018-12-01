@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Account Details</title>
+    <link href="/style.css" type="text/css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Baloo+Paaji|Poor+Story|Reenie+Beanie|Work+Sans:300,500,700" rel="stylesheet">
+  </head>
+  <body>
+     <div id="top-bar">
+            <a href="/user-index"><img class="logo" src="./logo.png"></img></a>
+            <a class="welcome">&nbsp{{username}},</a>
+            <div id="main">
+                <button class="openbtn" onclick="openNav()">User Profile</button> 
+                {{! &#9776; }}
+            </div>
+
+            <div class="nav-bar">
+            <div id="mySidebar" class="sidebar">
+                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+                <a href="/user-settings">Settings</a>
+                <a href = "/user-budgets">Budgets</a>
+                <a href="/logout">Log Out</a>
+                </div>
+
+
+            </div>
+        </div>
+    <h3>Email</h3>
+    <p>{{user.email}}</p>
+    <br />
+    <h4><a href = "/update-password">Update Password</a></h4>
+    <br />
+    <h3><a href = "/delete-account">Delete Account</a></h3>
+
+    {{info}}
+  </body>
+</html>

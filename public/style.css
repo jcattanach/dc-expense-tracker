@@ -1,0 +1,223 @@
+html {
+    font-family: 'Quicksand', sans-serif;
+    color: rgb(85, 85, 85);
+
+}
+
+body{
+    margin:0 !important;
+    display:flex;
+    flex-direction: column;
+
+}
+
+.register{
+
+    background-color:#E8F7E7;
+}
+.login{
+
+    background-color:#E8F7E7;
+}
+
+.nav-bar{
+    font-size:10px;
+    font-family: 'Baloo Paaji', cursive;
+
+
+
+}
+
+#top-bar{
+    background-color:#E8F7E7;
+    display:flex;
+    flex-direction: row;
+    justify-content: flex-end;
+}
+a{
+    text-decoration:none;
+}
+
+.logo{
+    margin-right: 850px;
+    margin-top:-30px;
+    height: 140px;
+    width: 140px;
+    margin-left: 30px;
+    margin-bottom: -30px;
+}
+
+
+
+/* div{
+    display:flex;
+    flex-direction: column;
+} */
+.welcome {
+
+    font-size: 20px;
+    margin-top:20px;
+}
+
+.center{
+    display: flex;
+    flex-direction: column;
+
+}
+.card1 {
+
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left:400px;
+    width: 500px;
+    height: 250px;;
+    border-style: solid;
+    border-radius: 20px;
+    border-width: 2px 2px 2px 2px;
+    border-color: rgb(28, 117, 36);
+    box-shadow: 0px 9px 30px 4px #888888;
+}
+.card1Cont{
+
+    left: 50px;
+    padding: 10px;
+    color: rgb(71, 192, 60);
+}
+.transactionBox{
+    border:none;
+    font-style: 20px;
+    margin-left:30px;
+}
+
+input::placeholder{
+    font-family: 'Quicksand', sans-serif;
+}
+
+select{
+    font-family: 'Quicksand', sans-serif;
+}
+.custom-select{
+    margin-left: 30px;
+}
+
+#cat {
+    border-radius: 20px;;
+    font-style: 20px;
+}
+.Addbtn {
+    margin-left: 150px;
+    background: white;
+    border: none;
+    color:black;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 12px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+}
+.Addbtn:hover{
+    border-radius: 20px;
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* card2 */
+.card2 {
+    margin-top: 20px;
+    margin-bottom: 20px;
+    margin-left:260px;
+
+    padding: 30px;
+    width: 700px;
+    border-style: solid;
+    border-radius: 20px;
+    border-width: 2px 2px 2px 2px;
+    border-color: rgb(163, 111, 28);
+    box-shadow: 0px 9px 30px 4px #888888;
+}
+.card2Cont{
+    position: inherit;
+    left: 50px;
+    padding: 10px;
+    color: rgb(163, 124, 18);
+}
+h1{
+    margin-left:65px;
+}
+#budget-title{
+    margin-left:140px;
+}
+h2{
+    margin-left:250px;
+}
+/* The sidebar menu */
+.sidebar {
+    height: 100%; /* 100% Full-height */
+    width: 0; /* 0 width - change this with JavaScript */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Stay on top */
+    top: 0;
+    left: 0;
+    background-color: #111; /* Black*/
+    overflow-x: hidden; /* Disable horizontal scroll */
+    padding-top: 60px; /* Place content 60px from the top */
+    transition: 0.5s; /* 0.5 second transition effect to slide in the sidebar */
+}
+
+/* The sidebar links */
+.sidebar a {
+    padding: 8px 8px 8px 32px;
+    text-decoration: none;
+    font-size: 25px;
+    color: #818181;
+    display: block;
+    transition: 0.3s;
+}
+
+/* When you mouse over the navigation links, change their color */
+.sidebar a:hover {
+    color: #f1f1f1;
+}
+
+/* Position and style the close button (top right corner) */
+.sidebar .closebtn {
+    position: absolute;
+    top: 0;
+    right: 25px;
+    font-size: 20px;
+    margin-left: 50px;
+}
+
+/* The button used to open the sidebar */
+.openbtn {
+    background-color: transparent;
+    font-size: 20px;
+    font-family: inherit;
+    cursor: pointer;
+    color: black;
+    border: none;
+    outline: none;
+    margin-bottom: 20px;
+    margin-top:20px;
+    width: 150px;
+
+
+}
+
+.openbtn:hover {
+    color: #4CAF50;
+}
+
+/* Style page content - use this if you want to push the page content to the right when you open the side navigation */
+#main {
+    transition: margin-left .5s; /* If you want a transition effect */
+    margin-left: 0 !important;
+
+}
+
+/* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
+@media screen and (max-height: 450px) {
+    .sidebar {padding-top: 15px;}
+    .sidebar a {font-size: 18px;}
+}
