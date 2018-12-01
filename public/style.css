@@ -1,30 +1,30 @@
 html {
     font-family: 'Quicksand', sans-serif;
     color: rgb(85, 85, 85);
-    
+
 }
 
 body{
     margin:0 !important;
     display:flex;
     flex-direction: column;
-    
+
 }
 
 .register{
-    
+
     background-color:#E8F7E7;
 }
 .login{
-  
+
     background-color:#E8F7E7;
 }
 
 .nav-bar{
     font-size:10px;
     font-family: 'Baloo Paaji', cursive;
-  
-    
+
+
 
 }
 
@@ -62,10 +62,10 @@ a{
 .center{
     display: flex;
     flex-direction: column;
-    
+
 }
 .card1 {
-    
+
     margin-top: 20px;
     margin-bottom: 20px;
     margin-left:400px;
@@ -78,7 +78,7 @@ a{
     box-shadow: 0px 9px 30px 4px #888888;
 }
 .card1Cont{
-    
+
     left: 50px;
     padding: 10px;
     color: rgb(71, 192, 60);
@@ -127,7 +127,7 @@ select{
     margin-top: 20px;
     margin-bottom: 20px;
     margin-left:260px;
-    
+
     padding: 30px;
     width: 700px;
     border-style: solid;
@@ -201,8 +201,8 @@ h2{
     margin-bottom: 20px;
     margin-top:20px;
     width: 150px;
-   
-    
+
+
 }
 
 .openbtn:hover {
@@ -213,7 +213,7 @@ h2{
 #main {
     transition: margin-left .5s; /* If you want a transition effect */
     margin-left: 0 !important;
-    
+
 }
 
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
