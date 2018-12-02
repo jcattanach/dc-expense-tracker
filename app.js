@@ -29,27 +29,33 @@ app.get('/',function(req,res){
     res.render('login')
   })
 
-app.post('/login', function(req,res){
+app.post('/login', function(req, res) {
+
   let username = req.body.loginUsername
   let password = req.body.loginPassword
 
-  functions.user.getUserByUsername(username)
-  .then(function(userInfo){
-    if(userInfo == null){
-      res.render('login',{message : 'You username or password is incorrect'})
-    }
-    else {
+  if (username == '') {
+    res.render('login', {message: 'You username or password is incorrect'})
+  } else {
+
+    functions.user.getUserByUsername(username).then(function(userInfo) {
+      if (userInfo == null) {
+        res.render('login', {message: 'You username or password is incorrect'})
+      } else {
         bcrypt.compare(password, userInfo.password, function(err, result) {
-            if(result == true){
-                console.log('login succesful')
-                req.session.userid = userInfo.id
-                req.session.username = userInfo.username
-                res.redirect('/user-index')
-            }else{
-                res.render('login',{message : 'You username or password is incorrect'})
-            }
+          if (result == true) {
+            console.log('login succesful')
+            req.session.userid = userInfo.id
+            req.session.username = userInfo.username
+            res.redirect('/user-index')
+          } else {
+            res.render('login', {message: 'You username or password is incorrect'})
+          }
         })
-    }})
+      }
+    })
+
+  }
 })
 
 
