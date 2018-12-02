@@ -1,47 +1,54 @@
 html {
     font-family: 'Quicksand', sans-serif;
     color: rgb(85, 85, 85);
-    
+
 }
 
 body{
     margin:0 !important;
     display:flex;
     flex-direction: column;
-    
+    justify-content: center;
+    align-items: center;
+
 }
 
 .register{
-    
+
     background-color:#E8F7E7;
 }
 .login{
-  
+
     background-color:#E8F7E7;
 }
 
 .nav-bar{
     font-size:10px;
     font-family: 'Baloo Paaji', cursive;
-  
-    
-
 }
+
+.budgets {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 
 #top-bar{
     background-color:#E8F7E7;
     display:flex;
     flex-direction: row;
     justify-content: flex-end;
+    width: 100%;
+    justify-content: flex-start;
+    box-sizing: border-box;
 }
 a{
     text-decoration:none;
 }
 
 .logo{
-    margin-right: 850px;
-    margin-top:-30px;
-    height: 140px;
+    height: 50px;
     width: 140px;
     margin-left: 30px;
     margin-bottom: -30px;
@@ -62,14 +69,16 @@ a{
 .center{
     display: flex;
     flex-direction: column;
-    
+
 }
 .card1 {
-    
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    align-content: center;
     margin-top: 20px;
     margin-bottom: 20px;
-    margin-left:400px;
-    width: 500px;
+    width: 75%;
     height: 250px;;
     border-style: solid;
     border-radius: 20px;
@@ -78,15 +87,12 @@ a{
     box-shadow: 0px 9px 30px 4px #888888;
 }
 .card1Cont{
-    
-    left: 50px;
     padding: 10px;
     color: rgb(71, 192, 60);
 }
 .transactionBox{
     border:none;
     font-style: 20px;
-    margin-left:30px;
 }
 
 input::placeholder{
@@ -105,7 +111,6 @@ select{
     font-style: 20px;
 }
 .Addbtn {
-    margin-left: 150px;
     background: white;
     border: none;
     color:black;
@@ -124,12 +129,14 @@ select{
 
 /* card2 */
 .card2 {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  align-items: center;
     margin-top: 20px;
     margin-bottom: 20px;
-    margin-left:260px;
-    
     padding: 30px;
-    width: 700px;
+    width: 80%;
     border-style: solid;
     border-radius: 20px;
     border-width: 2px 2px 2px 2px;
@@ -137,28 +144,16 @@ select{
     box-shadow: 0px 9px 30px 4px #888888;
 }
 .card2Cont{
-    position: inherit;
-    left: 50px;
     padding: 10px;
     color: rgb(163, 124, 18);
 }
-h1{
-    margin-left:65px;
-}
-#budget-title{
-    margin-left:140px;
-}
-h2{
-    margin-left:250px;
-}
+
 /* The sidebar menu */
 .sidebar {
     height: 100%; /* 100% Full-height */
     width: 0; /* 0 width - change this with JavaScript */
     position: fixed; /* Stay in place */
     z-index: 1; /* Stay on top */
-    top: 0;
-    left: 0;
     background-color: #111; /* Black*/
     overflow-x: hidden; /* Disable horizontal scroll */
     padding-top: 60px; /* Place content 60px from the top */
@@ -201,8 +196,8 @@ h2{
     margin-bottom: 20px;
     margin-top:20px;
     width: 150px;
-   
-    
+
+
 }
 
 .openbtn:hover {
@@ -213,11 +208,10 @@ h2{
 #main {
     transition: margin-left .5s; /* If you want a transition effect */
     margin-left: 0 !important;
-    
+
 }
 
 /* On smaller screens, where height is less than 450px, change the style of the sidenav (less padding and a smaller font size) */
 @media screen and (max-height: 450px) {
     .sidebar {padding-top: 15px;}
     .sidebar a {font-size: 18px;}
-}

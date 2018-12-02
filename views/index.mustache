@@ -1,17 +1,18 @@
 <html>
     <head>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link href="/style.css" type="text/css" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Baloo+Paaji|Poor+Story|Reenie+Beanie|Work+Sans:300,500,700" rel="stylesheet">
         <link href="https://fonts.googleapis.com/css?family=Quicksand" rel="stylesheet">
         <link rel="stylesheet" href="/popupS.min.css">
     </head>
     <body>
-        
+
         <div id="top-bar">
             <a href="/user-index"><img class="logo" src="./logo.png"></img></a>
             <a class="welcome">&nbsp{{username}},</a>
             <div id="main">
-                <button class="openbtn" onclick="openNav()">User Profile</button> 
+                <button class="openbtn" onclick="openNav()">User Profile</button>
                 {{! &#9776; }}
             </div>
 
@@ -23,11 +24,11 @@
                 <a href="/logout">Log Out</a>
                 </div>
 
-                
+
             </div>
         </div>
-        
-        
+
+
         <div class="card1">
             <div class="card1Cont">
             <h1>Add New Transactions</h1>
@@ -55,7 +56,7 @@
                 <div class="pngPlus"></div>
             </div>
         </div>
-        
+
         <div class="card2">
             <div class="card2Cont">
                 <h2 style="color: rgb(192, 159, 50)">Transactions</h2>
@@ -80,10 +81,10 @@
                         </select>
                         <input type = "submit" value = "Filter" />
                     </form>
-              
+
           <h4>{{budgetUpdate}}</h4>
           <h4>{{message}}</h4>
-        
+
                 {{! <div class="transactions"> }}
                     {{#transactions}}
                     <h3>{{name}}</h3><p>---- Amount: ${{amount}}---- Category: {{category}}</p>
@@ -91,12 +92,12 @@
                             <input type="hidden" name="id" value="{{id}}"/>
                             <input type="submit" value="Remove" />
                         </form>
-                    
+
                     {{/transactions}}
              </div>
-          
+
         </div>
-        
+
     </body>
     <script src="/client.js"></script>
     <script src="/popupS.min.js"></script>
