@@ -29,6 +29,8 @@ body{
   display: flex;
   flex-direction: column;
   align-items: center;
+  color: rgb(71, 192, 60);
+
 }
 
 .nav-bar{
@@ -225,6 +227,20 @@ select{
 
 .openbtn:hover {
     color: #4CAF50;
+}
+
+.deleteBtn {
+  background-color: red;
+  padding: 8px 12.5px 8px 12.5px;
+  margin-left: 30px;
+  color: white;
+  border-radius: 20px;
+}
+
+.deleteBtn:hover{
+    border-radius: 20px;
+    background-color: darkred;
+    color: white;
 }
 
 /* Style page content - use this if you want to push the page content to the right when you open the side navigation */
