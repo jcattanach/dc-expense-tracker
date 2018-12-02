@@ -5,7 +5,8 @@ html {
 }
 
 body{
-    margin:0 !important;
+    margin: 0;
+    padding: 0;
     display:flex;
     flex-direction: column;
     justify-content: center;
@@ -17,9 +18,17 @@ body{
 
     background-color:#E8F7E7;
 }
-.login{
-
-    background-color:#E8F7E7;
+.loginForm{
+  margin-top: 20px;
+  border-style: solid;
+  border-radius: 20px;
+  border-width: 2px 2px 2px 2px;
+  border-color: rgb(28, 117, 36);
+  box-shadow: 0px 9px 30px 4px #888888;
+  padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .nav-bar{
@@ -35,13 +44,14 @@ body{
 
 
 #top-bar{
+  margin-top: 0px;
     background-color:#E8F7E7;
     display:flex;
     flex-direction: row;
-    justify-content: flex-end;
-    width: 100%;
     justify-content: flex-start;
+    width: 100%;
     box-sizing: border-box;
+    align-content: center;
 }
 a{
     text-decoration:none;
@@ -51,15 +61,11 @@ a{
     height: 50px;
     width: 140px;
     margin-left: 30px;
-    margin-bottom: -30px;
+    margin-top: 5px;
+
 }
 
 
-
-/* div{
-    display:flex;
-    flex-direction: column;
-} */
 .welcome {
 
     font-size: 20px;
@@ -85,11 +91,11 @@ a{
     border-width: 2px 2px 2px 2px;
     border-color: rgb(28, 117, 36);
     box-shadow: 0px 9px 30px 4px #888888;
-}
-.card1Cont{
-    padding: 10px;
+    justify-content: center;
+    padding: 30px;
     color: rgb(71, 192, 60);
 }
+
 .transactionBox{
     border:none;
     font-style: 20px;
@@ -110,6 +116,25 @@ select{
     border-radius: 20px;;
     font-style: 20px;
 }
+
+.loginBtn {
+  background: white;
+  border: none;
+  color:black;
+  padding: 5px 7.5px 5px 7.5px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 12px;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+}
+
+.loginBtn:hover {
+  border-radius: 20px;
+  background-color: #4CAF50;
+  color: white;
+}
+
 .Addbtn {
     background: white;
     border: none;
@@ -142,11 +167,9 @@ select{
     border-width: 2px 2px 2px 2px;
     border-color: rgb(163, 111, 28);
     box-shadow: 0px 9px 30px 4px #888888;
-}
-.card2Cont{
-    padding: 10px;
     color: rgb(163, 124, 18);
 }
+
 
 /* The sidebar menu */
 .sidebar {

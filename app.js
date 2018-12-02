@@ -35,7 +35,7 @@ app.post('/login', function(req, res) {
   let password = req.body.loginPassword
 
   if (username == '') {
-    res.render('login', {message: 'You username or password is incorrect'})
+    res.render('login')
   } else {
 
     functions.user.getUserByUsername(username).then(function(userInfo) {

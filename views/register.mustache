@@ -9,17 +9,17 @@
     <link rel="stylesheet" href="/popupS.min.css">
   </head>
   <body>
-    <div class="register">
+    <div id='top-bar'>
     <a href="/user-index"><img class='logo' src="./logo.png"></img></a>
     </div>
-    <h1>Register</h1>
       <div class='loginForm'>
+        <h2>Register</h2>
         <form action='/register' method='POST'>
           <input type='text' name='registerUsername' placeholder="Enter username"/>
           <input type='password' name='registerPassword' placeholder="Enter password"/>
           <input type='password' name='confirmPassword' placeholder="Re-type password"/>
           <input type='email' name='registerEmail' placeholder="Enter email" />
-          <input type='submit' value='Register' onclick="usernameEmailTaken()"/>
+          <input class='loginBtn' type='submit' value='Register' onclick="usernameEmailTaken()"/>
           <div id ="snackbar">{{message}}</div>
         </form>
       </div>

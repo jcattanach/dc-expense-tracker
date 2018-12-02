@@ -13,12 +13,13 @@
     </div>
     <p>Need to register?<a href='/register'>Click here.</a></p>
     <div class='loginForm'>
+      <h2>Login</h2>
       <form action='/login' method='post'>
         <input type='text' name='loginUsername' placeholder="Enter username"/>
         <input type='password' name='loginPassword' placeholder="Enter password"/>
-        <input type='submit' value='Login'/>
+        <input class='loginBtn' type='submit' value='Login'/>
       </form>
-    </div>
     {{message}}
+  </div>
   </body>
 </html>
