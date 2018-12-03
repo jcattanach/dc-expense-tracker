@@ -8,25 +8,14 @@
     <link href="https://fonts.googleapis.com/css?family=Baloo+Paaji|Poor+Story|Reenie+Beanie|Work+Sans:300,500,700" rel="stylesheet">
   </head>
   <body>
-    <div id="top-bar">
-            <a href="/user-index"><img class="logo" src="./logo.png"></img></a>
-            <a class="welcome">&nbsp{{username}},</a>
-            <div id="main">
-                <button class="openbtn" onclick="openNav()">User Profile</button>
-                {{! &#9776; }}
-            </div>
-
-            <div class="nav-bar">
-            <div id="mySidebar" class="sidebar">
-                <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-                <a href="/user-settings">Settings</a>
-                <a href = "/user-budgets">Budgets</a>
-                <a href="/logout">Log Out</a>
-                </div>
-
-
-            </div>
-        </div>
+  <div class="topnav" id="myTopnav">
+    <a href="/user-index" id="nav-a"><img class="logo" src="./images/logo.png"></img></a>
+    <a href="/user-index" class="active">Home</a>
+    <a href="/user-settings">Settings</a>
+    <a href="/user-budgets">Budgets</a> 
+    <a href="/logout">Log Out</a>
+    <a href="javascript:void(0);" class="icon" onclick="myFunction()">&#9776;</a>
+  </div>
     <h1>Delete Account</h1>
       <div class='loginForm'>
         <form action='/delete-account' method='POST'>

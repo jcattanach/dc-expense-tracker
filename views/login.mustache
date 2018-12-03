@@ -1,24 +1,64 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
   <head>
+     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta charset="utf-8">
-    <title>Login</title>
-    <link href="/style.css" type="text/css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Baloo+Paaji|Poor+Story|Reenie+Beanie|Work+Sans:300,500,700" rel="stylesheet">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Sign in</title>
+
+    <!-- Font Icon -->
+    <link rel="stylesheet" href="./fonts/material-icon/css/material-design-iconic-font.min.css">
+
+    <!-- Main css -->
+    <link rel="stylesheet" href="./css/style.css">
   </head>
   <body>
-    <div id="top-bar" class="login">
-      <a href="/user-index"><img class='logo' src="./logo.png"></img></a></li>
+  <!-- Sing in  Form -->
+<section class="sign-in">
+    <div class="container">
+        <div class="signin-content">
+            <div class="signin-image">
+                <figure><img src="./images/logo.png" alt="sing up image"></figure>
+            </div>
+
+            <div class="signin-form">
+                <h2 class="form-title">Sign in</h2>
+                <span class='message'>{{message}}</span>
+                <form action='/login' method="POST" class="register-form" id="login-form">
+                    <div class="form-group">
+                        <label for="your_name"><i class="zmdi zmdi-account material-icons-name"></i></label>
+                        <input type="text" name="loginUsername" id="your_name" placeholder="Your Name"/>
+                    </div>
+                    <div class="form-group">
+                        <label for="your_pass"><i class="zmdi zmdi-lock"></i></label>
+                        <input type="password" name="loginPassword" id="your_pass" placeholder="Password"/>
+                    </div>
+                    <div class="form-group">
+                        <input type="checkbox" name="remember-me" id="remember-me" class="agree-term" />
+                        <label for="remember-me" class="label-agree-term"><span><span></span></span>Remember me</label>
+                    </div>
+                    <div class="form-group form-button">
+                        <input type="submit" name="signin" id="signin" class="form-submit" value="Log in"/>
+                    </div>
+                </form>
+                <br><br>
+                <a href="/register" class="signup-image-link">Create an account</a>
+                
+                
+            </div>
+        </div>
     </div>
-    <p>Need to register?<a href='/register'>Click here.</a></p>
-    <div class='loginForm'>
-      <form action='/login' method='post'>
-        <input type='text' name='loginUsername' placeholder="Enter username"/>
-        <input type='password' name='loginPassword' placeholder="Enter password"/>
-        <input type='submit' value='Login'/>
-      </form>
-    </div>
-    {{message}}
+</section>
+
+</div>
+
+<!-- JS -->
+<script src="./vendor/jquery/jquery.min.js"></script>
+
   </body>
 </html>
+
+
+
+
+
