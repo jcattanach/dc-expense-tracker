@@ -151,7 +151,7 @@ app.post('/filter-transactions',function(req,res){
             let message = ''
 
             if(budgetRemaining <= 25 && budgetRemaining > 0){
-                message = 'You have $25 or less remaining in your budget for this category'
+                message = ''
                 res.render('index',{message:message, budgetUpdate:budgetUpdate, transactions:categories, username:req.session.username})
             } else if( budgetRemaining == 0){
                 message = 'You have $0 remaining in your budget for this category'
