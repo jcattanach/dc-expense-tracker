@@ -16,16 +16,18 @@
     <a href="/logout">Log Out</a>
     <a href="javascript:void(0);" class="icon" onclick="myFunction()">&#9776;</a>
   </div>
-    <h1>Delete Account</h1>
-      <div class='loginForm'>
-        <form action='/delete-account' method='POST'>
-          <p>Are you sure you wish to delete your account?<br>All transaction history will be lost.</p>
-          <a href='/user-settings'>Go Back</a>
-          <input type='submit' value='DELETE'/>
-        </form>
-      </div>
-      {{message}}
-  </body>
-   <script src="/client.js"></script>
-    <script src="/popupS.min.js"></script>
+  <div class='loginForm'>
+    <h2>Delete Account</h2>
+    <form action='/delete-account' method='POST'>
+      <p>Are you sure you wish to delete your account?<br>All transaction history will be lost.</p>
+      <a href='/user-settings'>Go Back</a>
+      <input class='deleteBtn' type='submit' value='DELETE' />
+    </form>
+    {{message}}
+  </div>
+  
+</body>
+<script src="/client.js"></script>
+<script src="/popupS.min.js"></script>
+
 </html>

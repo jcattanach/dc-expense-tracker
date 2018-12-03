@@ -30,16 +30,18 @@ app.get('/', function (req, res) {
 })
 
 app.post('/login', function (req, res) {
+
     let username = req.body.loginUsername
     let password = req.body.loginPassword
 
-    functions.user.getUserByUsername(username)
-        .then(function (userInfo) {
-            if (userInfo == null) {
+    if (username == '') {
+        res.render('login')
+    } else {
 
+        functions.user.getUserByUsername(username).then(function (userInfo) {
+            if (userInfo == null) {
                 res.render('login', { message: 'You username or password is incorrect' })
-            }
-            else {
+            } else {
                 bcrypt.compare(password, userInfo.password, function (err, result) {
                     if (result == true) {
                         console.log('login succesful')
@@ -47,11 +49,13 @@ app.post('/login', function (req, res) {
                         req.session.username = userInfo.username
                         res.redirect('/user-index')
                     } else {
-                        res.render('login', { message: 'The username or password you entered is incorrect' })
+                        res.render('login', { message: 'You username or password is incorrect' })
                     }
                 })
             }
         })
+
+    }
 })
 
 
@@ -148,7 +152,7 @@ app.post('/filter-transactions', function (req, res) {
                 let message = ''
 
                 if (budgetRemaining <= 25 && budgetRemaining > 0) {
-                    message = 'You have $25 or less remaining in your budget for this category'
+                    message = ''
                     res.render('index', { message: message, budgetUpdate: budgetUpdate, transactions: categories, username: req.session.username })
                 } else if (budgetRemaining == 0) {
                     message = 'You have $0 remaining in your budget for this category'
