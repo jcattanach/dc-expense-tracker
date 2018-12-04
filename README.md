@@ -7,7 +7,7 @@
     As said before, the budget implementation is optional and therefore viewed as a feature. Our group also included the posibility of deleting the account, changing the budget amount and renewing the password.  
    
 ## View our APP: 
-As of right now, our website/app is not live. To view a live link, please copy and paste our code into your code editor. 
+https://budget-buddy-app.herokuapp.com/
 
 ## This site was built by
 [Jack Cattanach](https://github.com/jcattanach), [Pamela Hutchinson](https://github.com/pamelahutchinson), 
