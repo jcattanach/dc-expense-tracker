@@ -9,6 +9,7 @@
 ## View our APP: 
 https://budget-buddy-app.herokuapp.com/
 
+## Preview
 ![preview-gif](https://github.com/jcattanach/dc-expense-tracker/blob/master/budget-buddy.gif)
 
 ## This site was built by
