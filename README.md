@@ -9,6 +9,8 @@
 ## View our APP: 
 https://budget-buddy-app.herokuapp.com/
 
+![preview-gif](https://github.com/jcattanach/dc-expense-tracker/blob/master/budget-buddy.gif)
+
 ## This site was built by
 [Jack Cattanach](https://github.com/jcattanach), [Pamela Hutchinson](https://github.com/pamelahutchinson), 
 [Benjamin Juarez](https://github.com/bjuarez3), [Eddy Bullets](https://github.com/EddyScript).
